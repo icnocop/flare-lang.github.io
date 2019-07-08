@@ -1,0 +1,25 @@
+{
+  "build": {
+    "content": [
+      {
+        "exclude": [
+          "LICENSE.md",
+          "README.md"
+        ],
+        "files": [
+          "*.md",
+          "toc.yml"
+        ]
+      }
+    ],
+    "dest": "build",
+    "globalMetadataFiles": [
+      "global.json"
+    ],
+    "markdownEngineName": "markdig",
+    "template": [
+      "statictoc",
+      "darkfx/darkfx"
+    ]
+  }
+}

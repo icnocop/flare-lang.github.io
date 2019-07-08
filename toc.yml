@@ -1,0 +1,10 @@
+- name: Installation
+  href: installation.md
+- name: Documentation
+  href: documentation.md
+- name: Community
+  href: community.md
+- name: Development
+  href: development.md
+- name: News
+  href: news.md
