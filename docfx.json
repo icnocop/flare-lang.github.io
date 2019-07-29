@@ -17,6 +17,13 @@
       "global.json"
     ],
     "markdownEngineName": "markdig",
+    "resource": [
+      {
+        "files": [
+          "images/**"
+        ]
+      }
+    ],
     "template": [
       "statictoc",
       "darkfx/darkfx"
