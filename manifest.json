@@ -9,7 +9,7 @@
       "output": {
         ".html": {
           "relative_path": "community.html",
-          "hash": "Kk8JKC1U3dg4HqlOn0Q4YA=="
+          "hash": "lvbs+clVSVAcbKS6qy8ZEw=="
         }
       },
       "is_incremental": false,
@@ -21,7 +21,7 @@
       "output": {
         ".html": {
           "relative_path": "development.html",
-          "hash": "Ap36UqdF10FNr8ZZ7kgkpg=="
+          "hash": "ZHmJn6W6iNfr8z730l41Yw=="
         }
       },
       "is_incremental": false,
@@ -33,7 +33,29 @@
       "output": {
         ".html": {
           "relative_path": "documentation.html",
-          "hash": "qyhLqLq0b4DyZZsMcvyY1g=="
+          "hash": "9qEXpnSI9a9jOzWlEkkr+A=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/favicon.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/favicon.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/logo.svg",
+      "output": {
+        "resource": {
+          "relative_path": "images/logo.svg"
         }
       },
       "is_incremental": false,
@@ -45,7 +67,7 @@
       "output": {
         ".html": {
           "relative_path": "index.html",
-          "hash": "BOgpDpaSjFmt6DEOeUC1xA=="
+          "hash": "0bpkYgcvQcy0UzlWc38yiw=="
         }
       },
       "is_incremental": false,
@@ -57,7 +79,7 @@
       "output": {
         ".html": {
           "relative_path": "installation.html",
-          "hash": "UNA/CSSNlJaCjSuX2bF6Yg=="
+          "hash": "IEtcdICiyC1p+jcYNWNa5g=="
         }
       },
       "is_incremental": false,
@@ -69,7 +91,7 @@
       "output": {
         ".html": {
           "relative_path": "news.html",
-          "hash": "qgQXHBExkfL3pJxIuIHUJw=="
+          "hash": "Hi7FrnJq8NpjRiFszybCHQ=="
         }
       },
       "is_incremental": false,
@@ -98,6 +120,13 @@
           "can_incremental": false,
           "incrementalPhase": "build",
           "total_file_count": 6,
+          "skipped_file_count": 0
+        },
+        "ResourceDocumentProcessor": {
+          "can_incremental": false,
+          "details": "Processor ResourceDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
+          "incrementalPhase": "build",
+          "total_file_count": 0,
           "skipped_file_count": 0
         }
       }
