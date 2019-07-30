@@ -4,4 +4,4 @@ title: Documentation
 
 # Documentation
 
-Nothing to see here yet.
+* [Language Reference](language-reference.md)
