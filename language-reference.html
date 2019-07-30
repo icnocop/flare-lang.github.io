@@ -1,0 +1,1117 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Language Reference | Flare Programming Language </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Language Reference | Flare Programming Language ">
+    <meta name="generator" content="docfx 2.43.3.0">
+    
+    <link rel="shortcut icon" href="images/favicon.png">
+    <link rel="stylesheet" href="styles/docfx.vendor.css">
+    <link rel="stylesheet" href="styles/docfx.css">
+    <link rel="stylesheet" href="styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <meta property="docfx:navrel" content="toc">
+    <meta property="docfx:tocrel" content="toc">
+    
+    
+    
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="index.html">
+                <img id="logo" class="svg" src="images/logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+                
+                <ul class="nav level1 navbar-nav">
+                      <li>
+                          <a href="installation.html" title="Installation">Installation</a>
+                      </li>
+                      <li>
+                          <a href="documentation.html" title="Documentation">Documentation</a>
+                      </li>
+                      <li>
+                          <a href="community.html" title="Community">Community</a>
+                      </li>
+                      <li>
+                          <a href="development.html" title="Development">Development</a>
+                      </li>
+                      <li>
+                          <a href="news.html" title="News">News</a>
+                      </li>
+                </ul>    </div>
+          </div>
+        </nav>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        <div class="article row grid">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="language-reference">Language Reference</h1>
+
+<h2 id="introduction">Introduction</h2>
+<p>This is the language reference for the Flare programming language. It describes
+the structure of a Flare program, the grammar and informal semantics of various
+language features, and rationales for certain design decisions. Some base
+familiarity with programming language design is assumed.</p>
+<p>This is not a formal specification, and it may be incomplete in some areas. It
+does not document the core library, nor any implementation details of the main
+Flare implementation. It is primarily meant to be a reference for Flare
+programmers who need to look up the details of particular language features.</p>
+<h3 id="grammar-notation">Grammar Notation</h3>
+<p>The Flare language grammar will be given throughout this reference when
+relevant. It is specified in a variation of the Extended Backus-Naur Form
+(EBNF). EBNF consists of a series of grammar production rules (called
+non-terminals) built on fundamental lexical symbols (called terminals). The
+meaning of the EBNF variant used in this reference is given here.</p>
+<p>A production rule is defined as follows, using the <code>=</code> operator:</p>
+<pre><code class="lang-text">rule-name = ...
+</code></pre>
+<p>The right-hand side of the rule can refer to other rules (non-terminals) or
+symbols (terminals). Additionally, a number of operators are used to build more
+complex rules. These are, from highest to lowest precedence:</p>
+<ul>
+<li><code>&quot;A&quot;</code>: Means the literal string or character <code>A</code> in terms of Unicode scalars.
+Some literals may have escape sequences (e.g. <code>&quot;\\&quot;</code> which means the <code>\</code>
+character, or <code>&quot;\&quot;&quot;</code> which means the <code>&quot;</code> character).</li>
+<li><code>U+NNNNNN</code>: Means the specific Unicode scalar indicated by the hexadecimal
+<code>NNNNNN</code> value.</li>
+<li><code>&quot;A&quot; .. &quot;B&quot;</code>: Constructs a Unicode scalar range from the character <code>A</code> to <code>B</code>,
+inclusive.</li>
+<li><code>A ... | B ...</code>: The pipe operator constructs an alternation. This means that
+either <code>A ...</code> or <code>B ...</code> are allowed.</li>
+<li><code>[ A ... ]</code>: Square brackets construct an option. This means that <code>A ...</code> may
+or may not appear.</li>
+<li><code>{ A ... }</code>: Curly braces construct a zero-or-more repetition. This means that
+zero or multiple occurrences of <code>A ...</code> may appear.</li>
+<li><code>&lt; A ... &gt;</code>: Angle brackets construct a one-or-more repetition. This means
+that at least one occurrence of <code>A ...</code> must appear, and possibly more.</li>
+<li><code>A ... * N</code>: The asterisk indicates that <code>A ...</code> must appear <code>N</code> times.</li>
+<li><code>( A ... )</code>: Parentheses perform simple grouping to resolve precedence issues.</li>
+<li><code>? ... ?</code>: Specifies a special sequence. The meaning of the sequence is
+explicitly given in the <code>...</code> part.</li>
+</ul>
+<h2 id="lexical-structure">Lexical Structure</h2>
+<p>A Flare source file consists of a series of Unicode scalars encoded as UTF-8.
+These scalars are tokenized according to the lexical grammar, resulting in a
+series of tokens which are then processed when parsing the language proper. If a
+sequence of scalars matches multiple lexical production rules, lexical analysis
+should always form the longest possible token. For example, the sequence <code>&gt;&gt;</code>
+should result in the <code>&gt;&gt;</code> operator rather than two <code>&gt;</code> operators.</p>
+<p>The lexical grammar is given in this section. The syntactic grammar is given
+throughout this reference in relevant sections.</p>
+<pre><code class="lang-text">input = [ shebang-line ] { token }
+token = white-space |
+        comment |
+        operator |
+        delimiter |
+        keyword |
+        identifier |
+        literal
+</code></pre>
+<p><code>input</code> is the top-level production for lexical analysis.</p>
+<h3 id="shebang-line">Shebang Line</h3>
+<p>A Flare source file can start with a special shebang line that indicates the
+interpreter to use for running it. This allows the file to be invoked in a
+similar fashion to a regular program in Unix-like shells.</p>
+<pre><code class="lang-text">shebang-line = &quot;#!&quot; { ? any scalar except new-line ? }
+</code></pre>
+<p>The shebang line is only allowed to appear as the very first line in a source
+file and is discarded during lexical analysis.</p>
+<h3 id="white-space">White Space</h3>
+<p>Flare deliberately supports a very limited notion of white space: The space
+character, the horizontal tab character, as well as the line feed and carriage
+return characters.</p>
+<pre><code class="lang-text">white-space = blank |
+              new-line
+blank = U+000009 |
+        U+000020
+new-line = U+00000A |
+           U+00000D
+</code></pre>
+<p>White space is discarded during lexical analysis, and so production rules in the
+syntactic grammar will not consider it, with the implication being that white
+space is allowed anywhere between all other grammar elements.</p>
+<h3 id="comments">Comments</h3>
+<p>Comments in Flare start with <code>'</code> and run until the end of the line.</p>
+<pre><code class="lang-text">comment = &quot;'&quot; { ? any scalar except new-line ? }
+</code></pre>
+<p>Comments are treated similarly to white space in that they are allowed between
+all other grammar elements and so are not explicitly considered in production
+rules in the syntactic grammar.</p>
+<h3 id="operators">Operators</h3>
+<p>Flare has support for custom operators where the precedence is based on the
+first character in the operator, and associativity is either left-to-right (for
+infix operators) or right-to-left (for prefix operators). For example, <code>+</code> and
+<code>+&gt;</code> both have the same precedence and left-to-right associativity in a binary
+expression context, while in a prefix expression context, they both have
+right-to-left associativity.</p>
+<p>Certain operators are defined to override these rules, with special precedence
+and associativity; for example, the relational operators <code>&gt;</code> and <code>&gt;=</code> both have
+lower precedence than any other operator starting with <code>&gt;</code> (e.g. the right shift
+operator <code>&gt;&gt;</code>). This is made explicit in the syntactic grammar.</p>
+<pre><code class="lang-text">operator = special-operator |
+           custom-operator
+custom-operator = custom-multiplicative-operator |
+                  custom-additive-operator |
+                  custom-shift-operator |
+                  custom-bitwise-operator
+special-operator = &quot;!=&quot; |
+                   &quot;&lt;&quot; |
+                   &quot;&lt;=&quot; |
+                   &quot;=&quot; |
+                   &quot;==&quot; |
+                   &quot;&gt;&quot; |
+                   &quot;&gt;=&quot;
+operator-part = &quot;%&quot; |
+                &quot;&amp;&quot; |
+                &quot;*&quot; |
+                &quot;+&quot; |
+                &quot;-&quot; |
+                &quot;/&quot; |
+                &quot;&lt;&quot; |
+                &quot;&gt;&quot; |
+                &quot;^&quot; |
+                &quot;|&quot; |
+                &quot;~&quot;
+custom-bitwise-operator = ( &quot;&amp;&quot; | &quot;^&quot; | &quot;|&quot; ) { operator-part }
+custom-shift-operator = ( &quot;&lt;&quot; | &quot;&gt;&quot; ) { operator-part }
+custom-additive-operator = ( &quot;+&quot; | &quot;-&quot; | &quot;~&quot; ) { operator-part }
+custom-multiplicative-operator = ( &quot;%&quot; | &quot;*&quot; | &quot;/&quot; ) { operator-part }
+</code></pre>
+<h3 id="delimiters">Delimiters</h3>
+<p>These are various delimiters used in the grammar.</p>
+<pre><code class="lang-text">delimiter = &quot;#&quot; |
+            &quot;(&quot; |
+            &quot;)&quot; |
+            &quot;,&quot; |
+            &quot;.&quot; |
+            &quot;..&quot; |
+            &quot;-&gt;&quot; |
+            &quot;:&quot; |
+            &quot;::&quot; |
+            &quot;;&quot; |
+            &quot;&lt;-&quot; |
+            &quot;=&gt;&quot; |
+            &quot;?&quot; |
+            &quot;@&quot; |
+            &quot;[&quot; |
+            &quot;]&quot; |
+            &quot;{&quot; |
+            &quot;}&quot;
+</code></pre>
+<h3 id="keywords">Keywords</h3>
+<p>Keywords are special identifiers used to direct syntactic analysis. They cannot
+be used as identifiers.</p>
+<p>Some keywords are reserved for future expansion of the language.</p>
+<pre><code class="lang-text">keyword = used-keyword |
+          reserved-keyword
+used-keyword = &quot;and&quot; |
+               &quot;as&quot; |
+               &quot;assert&quot; |
+               &quot;break&quot; |
+               &quot;catch&quot; |
+               &quot;cond&quot; |
+               &quot;const&quot; |
+               &quot;else&quot; |
+               &quot;exc&quot; |
+               &quot;extern&quot; |
+               &quot;fn&quot; |
+               &quot;for&quot; |
+               &quot;freeze&quot; |
+               &quot;if&quot; |
+               &quot;in&quot; |
+               &quot;let&quot; |
+               &quot;loop&quot; |
+               &quot;macro&quot; |
+               &quot;match&quot; |
+               &quot;mod&quot; |
+               &quot;mut&quot; |
+               &quot;not&quot; |
+               &quot;or&quot; |
+               &quot;priv&quot; |
+               &quot;pub&quot; |
+               &quot;raise&quot; |
+               &quot;rec&quot; |
+               &quot;recv&quot; |
+               &quot;return&quot; |
+               &quot;use&quot; |
+               &quot;while&quot;
+reserved-keyword = &quot;asm&quot; |
+                   &quot;async&quot; |
+                   &quot;await&quot; |
+                   &quot;do&quot; |
+                   &quot;goto&quot; |
+                   &quot;pragma&quot; |
+                   &quot;quote&quot; |
+                   &quot;super&quot; |
+                   &quot;test&quot; |
+                   &quot;try&quot; |
+                   &quot;unquote&quot; |
+                   &quot;yield&quot;
+</code></pre>
+<h3 id="identifiers">Identifiers</h3>
+<p>Identifiers are used for naming modules, functions, variables, etc. There are
+separate rules for module and value identifiers.</p>
+<pre><code class="lang-text">identifier = module-identifier |
+             value-identifier |
+             fragment-identifier
+</code></pre>
+<h4 id="module-identifiers">Module Identifiers</h4>
+<p>Module identifiers are sequences of alphanumeric characters, always starting
+with an uppercase alphabetical character.</p>
+<pre><code class="lang-text">module-identifier = &quot;A&quot; .. &quot;Z&quot; { &quot;0&quot; .. &quot;9&quot; | &quot;A&quot; .. &quot;Z&quot; | &quot;a&quot; .. &quot;z&quot; }
+</code></pre>
+<h4 id="value-identifiers">Value Identifiers</h4>
+<p>Value identifiers (used for functions and variables) are sequences of lowercase
+alphanumeric and/or underscore (<code>_</code>) characters.</p>
+<pre><code class="lang-text">value-identifier = ( &quot;_&quot; | &quot;a&quot; .. &quot;z&quot; ) { &quot;0&quot; .. &quot;9&quot; | &quot;_&quot; | &quot;a&quot; .. &quot;z&quot; }
+</code></pre>
+<h4 id="fragment-identifiers">Fragment Identifiers</h4>
+<p>Fragment identifiers are similar to value identifiers but are prefixed with <code>$</code>.
+These are used for macro parameters.</p>
+<pre><code class="lang-text">fragment-identifier = &quot;$&quot; value-identifier
+</code></pre>
+<h3 id="literals">Literals</h3>
+<p>Literals are the fundamental building blocks of Flare expressions. These are the
+most basic values that are expressed without the need for evaluation and are
+therefore constants.</p>
+<pre><code class="lang-text">literal = nil-literal |
+          boolean-literal |
+          atom-literal |
+          integer-literal |
+          real-literal |
+          string-literal
+</code></pre>
+<h4 id="nil-literals">Nil Literals</h4>
+<p>A nil literal simply has the value <code>nil</code>, typically indicating the absence of
+any other kind of value.</p>
+<pre><code class="lang-text">nil-literal = &quot;nil&quot;
+</code></pre>
+<h4 id="boolean-literals">Boolean Literals</h4>
+<p>A Boolean literal has either the value <code>true</code> or <code>false</code>.</p>
+<pre><code class="lang-text">boolean-literal = &quot;true&quot; | &quot;false&quot;
+</code></pre>
+<h4 id="atom-literals">Atom Literals</h4>
+<p>An atom literal is simply a name - essentially an identifier in value form.</p>
+<pre><code class="lang-text">atom-literal = &quot;:&quot; identifier
+</code></pre>
+<p><code>:foo</code>, <code>:Foo</code>, and <code>:$foo</code> are all valid atoms.</p>
+<h4 id="integer-literals">Integer Literals</h4>
+<p>An integer literal is a number with a base of 2, 8, 10, or 16. A literal
+prefixed with <code>0b</code> denotes a binary literal, <code>0o</code> denotes an octal literal, and
+<code>0x</code> denotes a hexadecimal literal. If no prefix is present, the literal is
+decimal.</p>
+<pre><code class="lang-text">integer-literal = &lt; &quot;0&quot; .. &quot;9&quot; &gt; |
+                  &quot;0&quot; ( &quot;B&quot; | &quot;b&quot; ) &lt; &quot;0&quot; .. &quot;1&quot; &gt; |
+                  &quot;0&quot; ( &quot;O&quot; | &quot;o&quot; ) &lt; &quot;0&quot; .. &quot;7&quot; &gt; |
+                  &quot;0&quot; ( &quot;X&quot; | &quot;x&quot; ) &lt; &quot;0&quot; .. &quot;9&quot; | &quot;A&quot; .. &quot;F&quot; | &quot;a&quot; .. &quot;f&quot; &gt;
+</code></pre>
+<h4 id="real-literals">Real Literals</h4>
+<p>A real literal is an IEEE 754 <code>binary64</code> floating point number consisting of an
+integral part, a fractional part, and an optional exponent part.</p>
+<pre><code class="lang-text">real-literal = real-part &quot;.&quot; real-part [ real-exponent ]
+real-part = &lt; &quot;0&quot; .. &quot;9&quot; &gt;
+real-exponent = ( &quot;E&quot; | &quot;e&quot; ) [ &quot;+&quot; | &quot;-&quot; ] real-part
+</code></pre>
+<h4 id="string-literals">String Literals</h4>
+<p>A string literal is a series of Unicode scalars encoded as UTF-8.</p>
+<pre><code class="lang-text">string-literal = &quot;\&quot;&quot; { ? any scalar except &quot;\&quot;&quot; and &quot;\\&quot; ? | string-escape-sequence } &quot;\&quot;&quot;
+string-escape-sequence = &quot;\\&quot; ( string-escape-code | string-escape-unicode )
+string-escape-code = &quot;0&quot; | ( &quot;N&quot; | &quot;n&quot; ) | ( &quot;R&quot; | &quot;r&quot; ) | ( &quot;T&quot; | &quot;t&quot; ) | &quot;\&quot;&quot; | &quot;\\&quot;
+string-escape-unicode = ( &quot;U&quot; | &quot;u&quot; ) ( &quot;0&quot; .. &quot;9&quot; | &quot;A&quot; .. &quot;F&quot; | &quot;a&quot; .. &quot;f&quot; ) * 6
+</code></pre>
+<p>An escape sequence can be used to form a special character as shown in the
+following table:</p>
+<table>
+<thead>
+<tr>
+<th>Escape sequence</th>
+<th>Character name</th>
+<th>Unicode scalar</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>\0</code></td>
+<td>Null</td>
+<td>U+000000</td>
+</tr>
+<tr>
+<td><code>\t</code>, <code>\T</code></td>
+<td>Horizontal tab</td>
+<td>U+000009</td>
+</tr>
+<tr>
+<td><code>\n</code>, <code>\N</code></td>
+<td>Line feed</td>
+<td>U+00000A</td>
+</tr>
+<tr>
+<td><code>\r</code>, <code>\R</code></td>
+<td>Carriage return</td>
+<td>U+00000D</td>
+</tr>
+<tr>
+<td><code>\&quot;</code></td>
+<td>Double quote</td>
+<td>U+000022</td>
+</tr>
+<tr>
+<td><code>\\</code></td>
+<td>Backslash</td>
+<td>U+00005C</td>
+</tr>
+<tr>
+<td><code>\uNNNNNN</code>, <code>\UNNNNNN</code></td>
+<td>Any scalar</td>
+<td>U+NNNNNN</td>
+</tr>
+</tbody>
+</table>
+<h2 id="basic-concepts">Basic Concepts</h2>
+<p>This section provides a brief introduction to some of the basic concepts of the
+Flare language.</p>
+<h3 id="modules-and-declarations">Modules and Declarations</h3>
+<p>A Flare program is a collection of modules, each containing various kinds of
+declarations such as constants, functions, macros, etc. The module is the
+primary means of code organization, enabling separation of concerns and code
+reuse.</p>
+<p>Each source file is a module. A header at the beginning of the file specifies
+the full module name, with declarations coming after it. For example:</p>
+<pre><code class="lang-flare">mod A::B;
+
+fn foo() {
+    42;
+}
+</code></pre>
+<p>Though not strictly required, by convention, a module's full name should
+correspond to its location on the file system, but with lowercase letters. The
+above module would be located at <code>a/b.fl</code>. The module loader in the runtime
+system follows this convention when looking for modules that have not been
+explicitly loaded ahead of time.</p>
+<p>Modules can import other modules:</p>
+<pre><code class="lang-flare">mod A::B;
+
+use C::D;
+
+fn foo() {
+    bar();
+}
+</code></pre>
+<p>Here, <code>bar</code> is imported from the <code>C::D</code> module and made available in <code>A::B</code>.</p>
+<p>When a Flare program starts, the main module is loaded. Any <code>use</code> declarations
+in that module will trigger other modules to be loaded, which may in turn have
+their own <code>use</code> declarations, and so on. Circular <code>use</code> declarations (such as a
+module <code>A</code> declaring <code>use B</code> while module <code>B</code> declares <code>use A</code>) are considered
+errors.</p>
+<p>Modules can contain a variety of declarations. Here are some examples:</p>
+<pre><code class="lang-flare">mod A::B;
+
+const x = 42;
+
+pub fn foo() {
+    x;
+}
+
+extern bar(x, y, z);
+
+priv macro baz($x, $y, z) {
+    $x * $y + z;
+}
+</code></pre>
+<p>Visibility specifiers can be used on all declarations except <code>use</code> declarations.
+The default is <code>priv</code> if none is specified. Visibility is strictly enforced;
+there is no way to get at the private declarations in a module - not even
+through introspection. This is an important aspect of the sandboxing
+capabilities of Flare.</p>
+<h3 id="values-and-types">Values and Types</h3>
+<p>Being a dynamic language, Flare does not assign types to storage locations (such
+as variables and fields). Instead, values themselves have a type, and type
+errors are detected at run time. Additionally, there are no type declarations
+(such as classes in other languages); rather, values can define their own
+behavior.</p>
+<p>(Future versions of Flare may support optional type annotations that can be used
+for static analysis.)</p>
+<p>These are the types that Flare supports:</p>
+<ul>
+<li>Nil: Has the singleton value <code>nil</code>. It is typically used to indicate the lack
+of any other meaningful value (similar to <code>null</code> in other languages).</li>
+<li>Boolean: Has the value <code>true</code> or <code>false</code>.</li>
+<li>Atom: A named constant with an indeterminate value. Comparing two atoms is
+much faster than comparing two strings, so atoms are typically used as
+markers or tags. Examples: <code>:foo</code>, <code>Bar</code>, <code>:$baz</code>.</li>
+<li>Integer: An arbitrarily large integer. Examples: <code>42</code>, <code>-42</code>,
+<code>123456789123456789123456789123456789</code>.</li>
+<li>Real: A real number represented as IEEE 754 <code>binary64</code> floating point.
+Examples: <code>12.34</code>, <code>-42.0</code>, <code>1.2e-3</code>.</li>
+<li>String: An immutable sequence of Unicode scalars encoded as UTF-8. Examples:
+<code>&quot;foo&quot;</code>, <code>&quot;\tbar&quot;</code>, <code>&quot;b\u000061z&quot;</code>.</li>
+<li>Module: A loaded module. Typically referred to by a module path such as
+<code>Core::IO</code>. Module values behave similarly to records with immutable fields.</li>
+<li>Function: A callable function as a value. Carries information such as its
+originating module, name (if any), and arity. Example: <code>fn(x) =&gt; x * x</code>.</li>
+<li>Record: Similar to objects in other languages, a record is a collection of
+fields (which can individually be mutable or immutable), optionally carrying
+a name. Records can define overloaded behaviors such as operators, hashing,
+pattern views, etc. Examples: <code>rec { x = 42, y = :foo }</code>,
+<code>rec NamedRecord { field = :foo, mut mutable_field = :bar }</code>.</li>
+<li>Exception: Exceptions behave similarly to records, but with the difference
+that they must always carry a name, and they are allowed to be used as the
+operand of the <code>raise</code> expression. Example:
+<code>exc MyError { message = &quot;error!&quot; }</code>.</li>
+<li>Tuple: An immutable array of values with a fixed length of at least 2
+elements. Examples: <code>(42, :foo)</code>, <code>(:ok, rec { x = 42 }, &quot;y&quot;)</code>.</li>
+<li>Array: An array of values that may be mutable or immutable. Mutable arrays are
+expandable. Examples: <code>[]</code>, <code>[1, 2, 3]</code>, <code>mut [1, :foo, &quot;bar&quot;]</code>.</li>
+<li>Set: A hashed set of values that may be mutable or immutable, and does not
+allow duplicate values. Mutable sets are expandable. Sets have no ordering
+guarantees. Examples: <code>#{}</code>, <code>#{&quot;x&quot;, :y, z}</code>, <code>mut #{:foo, :bar, :baz}</code>.</li>
+<li>Map: A hashed map of key-value pairs that may be mutable or immutable, and
+does not allow duplicate keys. Mutable maps are expandable. Maps have no
+ordering guarantees. Examples: <code>#[]</code>, <code>#[&quot;foo&quot; : 42, :bar : nil]</code>,
+<code>mut #[:foo : 42]</code>.</li>
+<li>Agent: A lightweight thread of execution. Agent values are obtained through
+library functions such as <code>Core::Agent::self</code> and <code>Core::Agent::spawn</code>.</li>
+<li>Reference: A globally unique, opaque value. A reference value can only be
+obtained by calling <code>Core::new_ref</code> or by obtaining it from another agent.
+References are backed by at least 20 bytes of randomly generated data. These
+properties make references practically unforgeable and non-repeatable within
+a program's lifetime.</li>
+<li>Pointer: A native pointer. These are usually obtained by calling into various
+functions provided by the runtime system. As Flare has no syntax for
+dereferencing pointers, pointer values are effectively opaque to Flare code.</li>
+<li>Handle: A handle to some kind of native resource (raw memory, file
+descriptor, socket, etc). As with pointers, these values are opaque to Flare
+code. Unlike pointers, handles are tracked by the garbage collector and can
+run cleanup code when they are no longer reachable.</li>
+</ul>
+<p>All values in Flare are, conceptually, passed by reference. That said, for
+immutable values (integers, strings, tuples, etc), the implementation is free
+to pass them by value as this is not observable by Flare code.</p>
+<h3 id="mutability-and-freezing">Mutability and Freezing</h3>
+<p>While storage locations do not have types in Flare, they do have mutability
+information. Variables, record fields, arrays, sets, and maps can all be
+mutable, but only if marked explicitly as such. A few examples:</p>
+<pre><code class="lang-flare">let x = :foo;
+x = :bar; ' Panic: Trying to modify an immutable variable.
+
+let mut x = :foo;
+x = :bar; ' OK.
+
+let r = rec { x = :foo };
+r.x = :bar; ' Panic: Trying to modify an immutable field.
+
+let r = rec { mut x = :foo };
+r.x = :bar; ' OK.
+
+let a = [1, 2, 3];
+a[0] = 42; ' Panic: Trying to modify an immutable array.
+
+let a = mut [1, 2, 3];
+a[0] = 42; ' OK.
+
+let s = #{1, 2, 3};
+s-&gt;mut_add(4); ' Panic: Trying to modify an immutable set.
+
+let s = mut #{1, 2, 3};
+s-&gt;mut_add(4); ' OK.
+
+let m = #[&quot;foo&quot; : &quot;bar&quot;, &quot;baz&quot; : &quot;qux&quot;];
+m[&quot;foo&quot;] = &quot;xyzzy&quot;; ' Panic: Trying to modify an immutable map.
+
+let m = mut #[&quot;foo&quot; : &quot;bar&quot;, &quot;baz&quot; : &quot;qux&quot;];
+m[&quot;foo&quot;] = &quot;xyzzy&quot;; ' OK.
+</code></pre>
+<p>Since immutability is generally preferable, it is possible to freeze mutable
+storage locations once they no longer need to be mutable. This is done with the
+<code>freeze</code> expression:</p>
+<pre><code class="lang-flare">let mut x = :foo;
+x = :bar;
+freeze x;
+x = :baz; ' Panic: Trying to modify an immutable variable.
+
+let r = rec { mut x = :foo };
+r.x = :bar;
+freeze r.x;
+r.x = :baz; ' Panic: Trying to modify an immutable variable.
+</code></pre>
+<p>For arrays, sets, and maps, <code>freeze var</code> would be ambiguous as it could mean
+&quot;freeze the variable <code>var</code>&quot; or &quot;freeze the collection residing in variable
+<code>var</code>&quot;. Therefore, the syntax for freezing these types is <code>freeze in</code>:</p>
+<pre><code class="lang-flare">let a = mut [:foo, :bar];
+a[0] = :baz;
+freeze in a;
+a[0] = :qux; ' Panic: Trying to modify an immutable array.
+
+let s = mut #{:foo, :bar};
+s-&gt;mut_add(:baz);
+freeze in s;
+s-&gt;mut_add(:qux); ' Panic: Trying to modify an immutable set.
+
+let m = mut #[&quot;foo&quot; : &quot;bar&quot;];
+m[&quot;foo&quot;] = &quot;baz&quot;;
+freeze in m;
+m[&quot;foo&quot;] = &quot;qux&quot;; ' Panic: Trying to modify an immutable map.
+</code></pre>
+<p>Just as storage locations that are initially declared immutable cannot be turned
+mutable, any location that is frozen can never be turned mutable again.
+Immutability is strictly enforced; it cannot be bypassed, even with
+introspection.</p>
+<h3 id="pattern-matching">Pattern Matching</h3>
+<p>Pattern matching is used throughout Flare to simultaneously perform case
+analysis and destructuring on values. The <code>match</code>, <code>for</code>, <code>catch</code>, <code>let</code> and
+<code>use</code> constructs all make use of pattern matching.</p>
+<p>Here are some examples of pattern matching using <code>let</code> and <code>match</code>:</p>
+<pre><code class="lang-flare">' Bind `a` to the value `42`.
+let a = 42;
+
+' Bind `b` to the value of `a`, with `b` being mutable.
+let mut b = a;
+
+' Assert that `a` equals `42`.
+let 42 = a;
+
+' Bind `c` to the tuple `(a, b)`.
+let c = (a, b);
+
+' Bind `d` to the first element of `c` and discard the second element.
+let (d, _) = c;
+
+' Assert that `foo` returns a slice and that the first three elements are `1`,
+' `2`, `3`. Then bind `e` to the slice itself.
+let [1, 2, 3] as e = foo();
+
+match bar() {
+    ' Match the `&quot;foo&quot;` string constant.
+    &quot;foo&quot; =&gt; println(&quot;foo string&quot;)
+
+    ' Match a record containing the fields `x` and `y`. Bind `x1` and `y1` to
+    ' those fields, respectively.
+    rec { x = x1, y = y1 } =&gt; println(&quot;x = {}, y = {}&quot;, x1, y1)
+
+    ' Match an exception containing the field `message` and bind `msg` to it.
+    exc SomeError { message = msg } =&gt; println(&quot;error: {}&quot;, msg)
+
+    ' Match the `nil` constant.
+    nil =&gt; println(&quot;nil&quot;)
+
+    ' Match an integer above `42`. Bind `i` to the value.
+    i if is_integer(i) and i &gt; 42 =&gt; println(&quot;integer over 42&quot;)
+
+    ' Fallback case.
+    _ =&gt; println(&quot;something else&quot;)
+};
+</code></pre>
+<p>A failed match in a <code>let</code> statement will result in a panic, as will a failed
+match in the <code>for</code> and <code>use</code> expressions. A <code>match</code> expression will only panic
+if no cases match and there is no fallback case.</p>
+<p>Patterns allow recursively destructuring arbitrarily complex values and data
+structures.</p>
+<h3 id="error-handling">Error Handling</h3>
+<p>Flare's error handling model is a middle ground between exception handling and
+traditional error codes. Exception values can be returned with the <code>raise</code>
+expression and can be propagated at the call site using the <code>?</code> operator, or
+caught using the <code>catch</code> clause. An example:</p>
+<pre><code class="lang-flare">fn foo() {
+    raise exc MyError { message = &quot;error occurred&quot; };
+}
+
+fn bar() {
+    foo()? catch {
+        exc MyError { message = msg } =&gt; println(&quot;error: {}&quot;, msg)
+        ex =&gt; println(&quot;some other error&quot;)
+    };
+}
+</code></pre>
+<p>It is important to understand that the <code>?</code> operator can only be applied to call
+expressions. This means that call sites are the only place where exceptions can
+be caught. There is no such thing as a general <code>try</code>/<code>catch</code> block as in other
+languages.</p>
+<p>If a function raises an exception and the caller does not either propagate it
+with <code>?</code> or handle it with <code>catch</code>, a panic will occur. Some examples:</p>
+<pre><code class="lang-flare">fn foo() {
+    raise exc MyError { message = &quot;error occurred&quot; };
+}
+
+fn bar() {
+    foo()?; ' OK; propagatates exception to the caller of `bar`.
+
+    foo()? catch {
+        _ =&gt; nil ' OK; exception was handled.
+    };
+
+    foo(); ' Panic: Unobserved 'MyError' exception.
+
+    foo()? catch {
+        exc OtherError { } =&gt; nil ' Panic: Unhandled 'MyError' exception.
+    }
+}
+</code></pre>
+<h3 id="macros">Macros</h3>
+<p>Flare has a simple expression-based macro system allowing the inline expansion
+of code wherever a macro is invoked. Callers can pass code fragments to a macro
+which can use them to compose more complex expressions.</p>
+<p>For example, the <code>while</code> expression could be expressed like this:</p>
+<pre><code class="lang-flare">macro my_while($cond, $body) {
+    loop {
+        if !$cond {
+            break;
+        };
+
+        $body;
+    };
+}
+</code></pre>
+<p>With this, the following two loops are equivalent:</p>
+<pre><code class="lang-flare">let mut x = 0;
+while x &lt; 5 {
+    x = x + 1;
+};
+
+let mut x = 0;
+my_while(x &lt; 5, {
+    x = x + 1;
+});
+</code></pre>
+<p>Macros are hygienic: Variables introduced in a macro are not visible to
+callers, and macros cannot refer to variables in callers unless they are
+explicitly passed to the macro as part of its fragment parameters.</p>
+<p>Macros are expanded when a module is loaded. This means that even if a module
+containing a macro is reloaded, it will not trigger re-expansion of that macro
+in other modules. Macros can invoke other macros. Circular invocation of macros
+is considered an error.</p>
+<h3 id="agents-and-message-passing">Agents and Message Passing</h3>
+<p>Where other languages might use operating system threads for concurrency, Flare
+uses so-called agents. These are lightweight threads (also known as green
+threads) which are preemptively scheduled by the runtime system. They have
+various important properties such as being fast to create and destroy, having
+low memory footprint, having no shared state, and having the ability to monitor
+each other.</p>
+<p>Agents can be spawned with the <code>Core::Agent::spawn</code> function:</p>
+<pre><code class="lang-flare">use Core::Agent;
+
+fn main(_args, _env) {
+    let agent = spawn(fn(x, y, z) =&gt; {
+        println(x); ' `&quot;abc&quot;`
+        println(y); ' `:foo`
+        println(z); ' `42`
+    }, [&quot;abc&quot;, :foo, 42]);
+}
+</code></pre>
+<p>Agents communicate by sending messages to each other. Sending is done with the
+<code>&lt;-</code> operator, while receiving is done with the <code>recv</code> expression. Normally,
+<code>recv</code> will block until a message in the current agent's message queue matches
+one of the message patterns. An <code>else</code> clause can be given to make <code>recv</code>
+proceed immediately if no matching message is pending. Example:</p>
+<pre><code class="lang-flare">use Core::Agent;
+use Core::Time;
+
+fn main(_args, _env) {
+    let calc = spawn(fn() =&gt; {
+        loop {
+            recv {
+                (sender, :add, x, y) =&gt;
+                    sender &lt;- (:result, x + y)
+                :exit =&gt;
+                    break
+            } else {
+                ' Only process messages every second.
+                sleep(seconds(1));
+            };
+        };
+    }, []);
+
+    calc &lt;- (self(), :add, 21, 21);
+
+    recv {
+        (:result, z) =&gt; {
+            println(z); ' 42
+            calc &lt;- :exit;
+        }
+    };
+}
+</code></pre>
+<p>Messages are processed by <code>recv</code> expressions in the order they were sent to an
+agent. If a received message is not matched by any message pattern in a <code>recv</code>
+expression, it will be put back in the message queue to be tried again on the
+next <code>recv</code> invocation. The current <code>recv</code> expression then tries the next
+message in the queue, and so on until a message has been matched, or until the
+whole queue has been tried and there is an <code>else</code> clause.</p>
+<p>Since there is no shared state in Flare, sending a message to another agent
+requires performing a deep copy of the entire object graph the message contains.
+This deep copy will preserve relationships (i.e. two objects referring to the
+same object will do so in the copied object graph as well). Mutability will also
+be mirrored in the copied object graph. Certain special values (like handles)
+may be invalidated in the target agent after a copy; this depends on what code
+the handle was obtained from and whether that code can deal with such a copy
+occurring.</p>
+<h3 id="garbage-collection">Garbage Collection</h3>
+<p>Memory management in Flare is fully automatic through garbage collection. Since
+there is no shared state, garbage collection is an entirely agent-local
+operation; garbage collection in one agent will never need to pause another
+agent.</p>
+<p>A garbage collection works by tracing all values that are still reachable by
+code running in an agent, and then freeing all values that are not. Garbage
+collections are triggered when an agent runs out of memory to allocate some
+value in, or if the <code>Core::GC::collect</code> function is called manually. If after a
+garbage collection there is still not enough memory, the runtime system will
+allocate memory from the operating system. Finally, if this fails, the agent
+will panic - there is no way to catch an out-of-memory error within an agent.</p>
+<p>While the vast majority of values are allocated within an agent's local heap,
+some values are, by necessity, global. Agent values are a good example of this:
+An agent can be reachable from multiple other agents, and copying an agent
+obviously does not make sense, so agent values use atomic reference counting
+rather than traditional tracing garbage collection.</p>
+<p>The Flare language has no built-in support for manual memory management. The
+core library has escape hatches that allow it, but these are only accessible
+from agents with the right reference value (passed to <code>main</code> initially). This
+design ensures that sandboxed agents cannot perform unsafe operations that could
+jeopardize the integrity of the whole process.</p>
+<h3 id="startup-and-termination">Startup and Termination</h3>
+<p>A normal Flare program will begin in the special <code>main</code> function:</p>
+<pre><code class="lang-flare">fn main(args, env) {
+}
+</code></pre>
+<p>This function is invoked by the runtime system after the runtime has been
+initialized. The <code>args</code> parameter contains an immutable array of command line
+arguments, while the <code>env</code> parameter contains an immutable map of environment
+variables. These are both passed by the host environment. Any value returned by
+this function is ignored; halting with a non-zero status code can be done with
+the <code>Core::halt</code> function.</p>
+<p>The <code>main</code> function will be executed in the root agent - a special agent created
+by the runtime system on startup. This agent has all capabilities initially
+made available by the runtime system, and can freely provide those capabilities
+to child agents as needed. The root agent is thus quite similar to the <code>init</code>
+process in a Unix system.</p>
+<p>The runtime system terminates once the <code>main</code> function returns, or if some
+external signal has triggered a runtime shutdown. Termination will not wait for
+all agents to shut down cleanly; the only resources that will be given a chance
+to run cleanup code are handle values. So, a program that wishes to terminate
+cleanly should arrange for all agents to exit cooperatively before returning
+from <code>main</code>.</p>
+<h2 id="program-structure">Program Structure</h2>
+<pre><code class="lang-text">program = { attribute } &quot;mod&quot; module-path &quot;;&quot; { declaration }
+module-path = module-identifier { &quot;::&quot; module-identifier }
+</code></pre>
+<h3 id="attributes">Attributes</h3>
+<pre><code class="lang-text">attribute = &quot;@&quot; &quot;[&quot; value-identifier &quot;=&quot; literal &quot;]&quot;
+</code></pre>
+<h3 id="declarations">Declarations</h3>
+<pre><code class="lang-text">declaration = { attribute } ( use-declaration |
+                              constant-declaration |
+                              function-declaration |
+                              extern-declaration |
+                              macro-declaration )
+visibility = &quot;priv&quot; | &quot;pub&quot;
+</code></pre>
+<h4 id="use-declaration">Use Declaration</h4>
+<pre><code class="lang-text">use-declaration = &quot;use&quot; module-path [ &quot;as&quot; module-identifier ] &quot;;&quot;
+</code></pre>
+<h4 id="constant-declaration">Constant Declaration</h4>
+<pre><code class="lang-text">constant-declaration = [ visibility ] &quot;const&quot; value-identifier &quot;=&quot; expression &quot;;&quot;
+</code></pre>
+<h4 id="function-declaration">Function Declaration</h4>
+<pre><code class="lang-text">function-declaration = [ visibility ] &quot;fn&quot; value-identifier function-parameter-list block-expression
+function-parameter-list = &quot;(&quot; [ function-parameter { &quot;,&quot; function-parameter } [ variadic-function-parameter ] ] &quot;)&quot;
+function-parameter = { attribute } value-identifier
+variadic-function-parameter = &quot;,&quot; &quot;..&quot; function-parameter
+</code></pre>
+<h4 id="extern-declaration">Extern Declaration</h4>
+<pre><code class="lang-text">extern-declaration = [ visibility ] &quot;extern&quot; value-identifier function-parameter-list &quot;;&quot;
+</code></pre>
+<h4 id="macro-declaration">Macro Declaration</h4>
+<pre><code class="lang-text">macro-declaration = [ visibility ] &quot;macro&quot; value-identifier macro-parameter-list block-expression
+macro-parameter-list = &quot;(&quot; [ macro-parameter { &quot;,&quot; macro-parameter } ] &quot;)&quot;
+macro-parameter = { attribute } fragment-identifier
+</code></pre>
+<h3 id="statements">Statements</h3>
+<pre><code class="lang-text">statement = let-statement |
+            use-statement |
+            expression-statement
+</code></pre>
+<h4 id="let-statement">Let Statement</h4>
+<pre><code class="lang-text">let-statement = &quot;let&quot; pattern &quot;=&quot; expression &quot;;&quot;
+</code></pre>
+<h4 id="use-statement">Use Statement</h4>
+<pre><code class="lang-text">use-statement = &quot;use&quot; pattern &quot;=&quot; expression &quot;;&quot;
+</code></pre>
+<h4 id="expression-statements">Expression Statements</h4>
+<pre><code class="lang-text">expression-statement = expression &quot;;&quot;
+</code></pre>
+<h3 id="expressions">Expressions</h3>
+<pre><code class="lang-text">expression = send-expression
+</code></pre>
+<h4 id="prefix-expressions">Prefix Expressions</h4>
+<pre><code class="lang-text">prefix-expression = unary-expression |
+                    assert-expression |
+                    primary-expression |
+                    postfix-expression
+</code></pre>
+<h5 id="unary-expression">Unary Expression</h5>
+<pre><code class="lang-text">unary-expression = ( custom-operator | &quot;not&quot; ) prefix-expression
+</code></pre>
+<h5 id="assert-expression">Assert Expression</h5>
+<pre><code class="lang-text">assert-expression = &quot;assert&quot; prefix-expression
+</code></pre>
+<h4 id="infix-expressions">Infix Expressions</h4>
+<h5 id="send-expression">Send Expression</h5>
+<pre><code class="lang-text">send-expression = assign-expression { &quot;&lt;-&quot; send-expression }
+</code></pre>
+<h5 id="assign-expression">Assign Expression</h5>
+<pre><code class="lang-text">assign-expression = logical-expression { &quot;=&quot; assign-expression }
+</code></pre>
+<h5 id="logical-expression">Logical Expression</h5>
+<pre><code class="lang-text">logical-expression = relational-expression { ( &quot;and&quot; | &quot;or&quot; ) relational-expression }
+</code></pre>
+<h5 id="relational-expression">Relational Expression</h5>
+<pre><code class="lang-text">relational-expression = bitwise-expression { ( &quot;!=&quot; | &quot;&lt;&quot; | &quot;&lt;=&quot; | &quot;==&quot; | &quot;&gt;&quot; | &quot;&gt;=&quot; ) bitwise-expression }
+</code></pre>
+<h5 id="bitwise-expression">Bitwise Expression</h5>
+<pre><code class="lang-text">bitwise-expression = shift-expression { custom-bitwise-operator shift-expression }
+</code></pre>
+<h5 id="shift-expression">Shift Expression</h5>
+<pre><code class="lang-text">shift-expression = additive-expression { custom-shift-operator additive-expression }
+</code></pre>
+<h5 id="additive-expression">Additive Expression</h5>
+<pre><code class="lang-text">additive-expression = multiplicative-expression { custom-additive-operator multiplicative-expression }
+</code></pre>
+<h5 id="multiplicative-expression">Multiplicative Expression</h5>
+<pre><code class="lang-text">multiplicative-expression = prefix-expression { custom-multiplicative-operator prefix-expression }
+</code></pre>
+<h4 id="postfix-expressions">Postfix Expressions</h4>
+<pre><code class="lang-text">postfix-expression = primary-expression { call-expression |
+                                          method-call-expression |
+                                          index-expression |
+                                          field-access-expression }
+</code></pre>
+<h5 id="call-expression">Call Expression</h5>
+<pre><code class="lang-text">call-expression = primary-expression argument-list [ call-try ]
+argument-list = &quot;(&quot; [ argument { &quot;,&quot; argument } [ variadic-argument ] ] &quot;)&quot;
+argument = expression
+variadic-argument = &quot;,&quot; &quot;..&quot; argument
+call-try = &quot;?&quot; [ call-try-catch ]
+call-try-catch = &quot;catch&quot; &quot;{&quot; &lt; call-try-catch-arm &gt; &quot;}&quot;
+call-try-catch-arm = try-catch-pattern [ pattern-arm-guard ] &quot;=&gt;&quot; expression
+</code></pre>
+<h5 id="method-call-expression">Method Call Expression</h5>
+<pre><code class="lang-text">method-call-expression = primary-expression &quot;-&gt;&quot; value-identifier argument-list [ call-try ]
+</code></pre>
+<h5 id="index-expression">Index Expression</h5>
+<pre><code class="lang-text">index-expression = primary-expression index-list
+index-list = &quot;[&quot; [ index { &quot;,&quot; index } [ variadic-index ] ] &quot;]&quot;
+index = expression
+variadic-index = &quot;,&quot; &quot;..&quot; index
+</code></pre>
+<h5 id="field-access-expression">Field Access Expression</h5>
+<pre><code class="lang-text">field-access-expression = primary-expression &quot;.&quot; value-identifier
+</code></pre>
+<h4 id="primary-expressions">Primary Expressions</h4>
+<pre><code class="lang-text">primary-expression = ( parenthesized-expression |
+                       identifier-expression |
+                       fragment-expression |
+                       literal-expression |
+                       lambda-expression |
+                       module-expression |
+                       record-expression |
+                       exception-expression |
+                       tuple-expression |
+                       array-expression |
+                       set-expression |
+                       map-expression |
+                       block-expression |
+                       if-expression |
+                       cond-expression |
+                       match-expression |
+                       for-expression |
+                       while-expression |
+                       loop-expression |
+                       break-expression |
+                       receive-expression |
+                       raise-expression |
+                       freeze-expression |
+                       return-expression )
+</code></pre>
+<h5 id="parenthesized-expression">Parenthesized Expression</h5>
+<pre><code class="lang-text">parenthesized-expression = &quot;(&quot; expression &quot;)&quot;
+</code></pre>
+<h5 id="identifier-expression">Identifier Expression</h5>
+<pre><code class="lang-text">identifier-expression = value-identifier
+</code></pre>
+<h5 id="fragment-expression">Fragment Expression</h5>
+<pre><code class="lang-text">fragment-expression = fragment-identifier
+</code></pre>
+<h5 id="literal-expression">Literal Expression</h5>
+<pre><code class="lang-text">literal-expression = literal
+</code></pre>
+<h5 id="lambda-expression">Lambda Expression</h5>
+<pre><code class="lang-text">lambda-expression = &quot;fn&quot; lambda-parameter-list &quot;=&gt;&quot; expression
+lambda-parameter-list = &quot;(&quot; [ lambda-parameter { &quot;,&quot; lambda-parameter } [ variadic-lambda-parameter ] ] &quot;)&quot;
+lambda-parameter = value-identifier
+variadic-lambda-parameter = &quot;,&quot; &quot;..&quot; lambda-parameter
+</code></pre>
+<h5 id="module-expression">Module Expression</h5>
+<pre><code class="lang-text">module-expression = module-path
+</code></pre>
+<h5 id="record-expression">Record Expression</h5>
+<pre><code class="lang-text">record-expression = &quot;rec&quot; [ module-identifier ] &quot;{&quot; [ expression-field { &quot;,&quot; expression-field } ] &quot;}&quot;
+expression-field = [ &quot;mut&quot; ] value-identifier &quot;=&quot; expression
+</code></pre>
+<h5 id="exception-expression">Exception Expression</h5>
+<pre><code class="lang-text">exception-expression = &quot;exc&quot; module-identifier &quot;{&quot; [ expression-field { &quot;,&quot; expression-field } ] &quot;}&quot;
+</code></pre>
+<h5 id="tuple-expression">Tuple Expression</h5>
+<pre><code class="lang-text">tuple-expression = &quot;(&quot; expression &lt; &quot;,&quot; expression &gt; &quot;)&quot;
+</code></pre>
+<h5 id="array-expression">Array Expression</h5>
+<pre><code class="lang-text">array-expression = &quot;[&quot; [ expression { &quot;,&quot; expression } ] &quot;]&quot;
+</code></pre>
+<h5 id="set-expression">Set Expression</h5>
+<pre><code class="lang-text">set-expression = &quot;#&quot; &quot;{&quot; [ expression { &quot;,&quot; expression } ] &quot;}&quot;
+</code></pre>
+<h5 id="map-expression">Map Expression</h5>
+<pre><code class="lang-text">map-expression = &quot;#&quot; &quot;[&quot; [ map-expression-pair { &quot;,&quot; map-expression-pair } ] &quot;]&quot;
+map-expression-pair = expression &quot;:&quot; expression
+</code></pre>
+<h5 id="block-expression">Block Expression</h5>
+<pre><code class="lang-text">block-expression = &quot;{&quot; &lt; statement &gt; &quot;}&quot;
+</code></pre>
+<h5 id="if-expression">If Expression</h5>
+<pre><code class="lang-text">if-expression = &quot;if&quot; expression block-expression [ if-expression-else ]
+if-expression-else = &quot;else&quot; ( block-expression | if-expression )
+</code></pre>
+<h5 id="condition-expression">Condition Expression</h5>
+<pre><code class="lang-text">cond-expression = &quot;cond&quot; &quot;{&quot; &lt; cond-expression-arm &gt; &quot;}&quot;
+cond-expression-arm = expression &quot;=&gt;&quot; expression
+</code></pre>
+<h5 id="match-expression">Match Expression</h5>
+<pre><code class="lang-text">match-expression = &quot;match&quot; expression &quot;{&quot; &lt; pattern-arm &gt; &quot;}&quot;
+pattern-arm = pattern [ pattern-arm-guard ] &quot;=&gt;&quot; expression
+pattern-arm-guard = &quot;if&quot; expression
+</code></pre>
+<h5 id="for-expression">For Expression</h5>
+<pre><code class="lang-text">for-expression = &quot;for&quot; pattern &quot;in&quot; expression block-expression
+</code></pre>
+<h5 id="while-expression">While Expression</h5>
+<pre><code class="lang-text">while-expression = &quot;while&quot; expression block-expression
+</code></pre>
+<h5 id="loop-expression">Loop Expression</h5>
+<pre><code class="lang-text">loop-expression = &quot;loop&quot;
+</code></pre>
+<h5 id="break-expression">Break Expression</h5>
+<pre><code class="lang-text">break-expression = &quot;break&quot;
+</code></pre>
+<h5 id="receive-expression">Receive Expression</h5>
+<pre><code class="lang-text">recv-expression = &quot;recv&quot; &quot;{&quot; { pattern-arm } &quot;}&quot; [ recv-expression-else ]
+recv-expression-else = &quot;else&quot; block-expression
+</code></pre>
+<h5 id="raise-expression">Raise Expression</h5>
+<pre><code class="lang-text">raise-expression = &quot;raise&quot; expression
+</code></pre>
+<h5 id="freeze-expression">Freeze Expression</h5>
+<pre><code class="lang-text">freeze-expression = &quot;freeze&quot; [ &quot;in&quot; ] expression
+</code></pre>
+<h5 id="return-expression">Return Expression</h5>
+<pre><code class="lang-text">return-expression = &quot;return&quot; expression
+</code></pre>
+<h3 id="patterns">Patterns</h3>
+<pre><code class="lang-text">pattern = ( identifier-pattern |
+            literal-pattern |
+            module-pattern |
+            tuple-pattern |
+            record-pattern |
+            exception-pattern |
+            array-pattern |
+            set-pattern |
+            map-pattern ) [ &quot;as&quot; [ &quot;mut&quot; ] value-identifier ]
+try-catch-pattern = ( identifier-pattern |
+                      exception-pattern ) [ &quot;as&quot; [ &quot;mut&quot; ] value-identifier ]
+</code></pre>
+<h4 id="identifier-pattern">Identifier Pattern</h4>
+<pre><code class="lang-text">identifier-pattern = [ &quot;mut&quot; ] value-identifier
+</code></pre>
+<h4 id="literal-pattern">Literal Pattern</h4>
+<pre><code class="lang-text">literal-pattern = nil-literal |
+                  boolean-literal |
+                  atom-literal |
+                  [ &quot;-&quot; ] ( integer-literal | real-literal ) |
+                  string-literal
+</code></pre>
+<h4 id="module-pattern">Module Pattern</h4>
+<pre><code class="lang-text">module-pattern = module-path
+</code></pre>
+<h4 id="tuple-pattern">Tuple Pattern</h4>
+<pre><code class="lang-text">tuple-pattern = &quot;(&quot; pattern &lt; &quot;,&quot; pattern &gt; &quot;)&quot;
+</code></pre>
+<h4 id="record-pattern">Record Pattern</h4>
+<pre><code class="lang-text">record-pattern = &quot;rec&quot; [ module-identifier ] &quot;{&quot; [ pattern-field { &quot;,&quot; pattern-field } ] &quot;}&quot;
+pattern-field = value-identifier &quot;=&quot; pattern
+</code></pre>
+<h4 id="exception-pattern">Exception Pattern</h4>
+<pre><code class="lang-text">exception-pattern = &quot;exc&quot; module-identifier &quot;{&quot; [ pattern-field { &quot;,&quot; pattern-field } ] &quot;}&quot;
+</code></pre>
+<h4 id="array-pattern">Array Pattern</h4>
+<pre><code class="lang-text">array-pattern = &quot;[&quot; [ pattern { &quot;,&quot; pattern } ] &quot;]&quot; [ pattern-remainder ]
+pattern-remainder = &quot;::&quot; pattern
+</code></pre>
+<h4 id="set-pattern">Set Pattern</h4>
+<pre><code class="lang-text">set-pattern = &quot;#&quot; &quot;{&quot; [ expression { &quot;,&quot; expression } ] &quot;}&quot; [ pattern-remainder ]
+</code></pre>
+<h4 id="map-pattern">Map Pattern</h4>
+<pre><code class="lang-text">map-pattern = &quot;#&quot; &quot;[&quot; [ map-pattern-pair { &quot;,&quot; map-pattern-pair } ] &quot;]&quot; [ pattern-remainder ]
+map-pattern-pair = expression &quot;:&quot; pattern
+</code></pre>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            The source code for this website is available on <a href="https://github.com/flare-lang/flare-lang.github.io">GitHub</a>.
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="styles/docfx.js"></script>
+    <script type="text/javascript" src="styles/main.js"></script>
+  </body>
+</html>

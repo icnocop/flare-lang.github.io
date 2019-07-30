@@ -33,7 +33,7 @@
       "output": {
         ".html": {
           "relative_path": "documentation.html",
-          "hash": "9qEXpnSI9a9jOzWlEkkr+A=="
+          "hash": "LBPrJNNXM+h90pF8EXrpBg=="
         }
       },
       "is_incremental": false,
@@ -87,6 +87,18 @@
     },
     {
       "type": "Conceptual",
+      "source_relative_path": "language-reference.md",
+      "output": {
+        ".html": {
+          "relative_path": "language-reference.html",
+          "hash": "uiJzmtmIjubo+XkyS/VCoA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
       "source_relative_path": "news.md",
       "output": {
         ".html": {
@@ -119,7 +131,7 @@
         "ConceptualDocumentProcessor": {
           "can_incremental": false,
           "incrementalPhase": "build",
-          "total_file_count": 6,
+          "total_file_count": 7,
           "skipped_file_count": 0
         },
         "ResourceDocumentProcessor": {
