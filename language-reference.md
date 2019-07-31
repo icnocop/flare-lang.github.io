@@ -713,7 +713,7 @@ For example, the `while` expression could be expressed like this:
 
 ```flare
 macro my_while($cond, $body) {
-    loop {
+    while true {
         if !$cond {
             break;
         };
@@ -732,7 +732,7 @@ while x < 5 {
 };
 
 let mut x = 0;
-my_while(x < 5, {
+my_while!(x < 5, {
     x = x + 1;
 });
 ```
@@ -781,7 +781,7 @@ use Core::Time;
 
 fn main(_args, _env) {
     let calc = spawn(fn() => {
-        loop {
+        while true {
             recv {
                 (sender, :add, x, y) =>
                     sender <- (:result, x + y)
@@ -1051,7 +1051,7 @@ postfix-expression = primary-expression { call-expression |
 ##### Call Expression
 
 ```text
-call-expression = primary-expression argument-list [ call-try ]
+call-expression = argument-list [ call-try ]
 argument-list = "(" [ argument { "," argument } [ variadic-argument ] ] ")"
 argument = expression
 variadic-argument = "," ".." argument
@@ -1063,13 +1063,13 @@ call-try-catch-arm = try-catch-pattern [ pattern-arm-guard ] "=>" expression
 ##### Method Call Expression
 
 ```text
-method-call-expression = primary-expression "->" value-identifier argument-list [ call-try ]
+method-call-expression = "->" value-identifier argument-list [ call-try ]
 ```
 
 ##### Index Expression
 
 ```text
-index-expression = primary-expression index-list
+index-expression = index-list
 index-list = "[" [ index { "," index } [ variadic-index ] ] "]"
 index = expression
 variadic-index = "," ".." index
@@ -1078,7 +1078,7 @@ variadic-index = "," ".." index
 ##### Field Access Expression
 
 ```text
-field-access-expression = primary-expression "." value-identifier
+field-access-expression = "." value-identifier
 ```
 
 #### Primary Expressions
@@ -1086,6 +1086,7 @@ field-access-expression = primary-expression "." value-identifier
 ```text
 primary-expression = ( parenthesized-expression |
                        identifier-expression |
+                       macro-call-expression |
                        fragment-expression |
                        literal-expression |
                        lambda-expression |
@@ -1120,6 +1121,13 @@ parenthesized-expression = "(" expression ")"
 
 ```text
 identifier-expression = value-identifier
+```
+
+##### Macro Call Expression
+
+```text
+macro-call-expression = value-identifier "!" macro-argument-list
+macro-argument-list = "(" [ expression { "," expression } ] ")"
 ```
 
 ##### Fragment Expression
