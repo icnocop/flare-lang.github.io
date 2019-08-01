@@ -1137,7 +1137,6 @@ macro-argument-list = "(" [ expression { "," expression } ] ")"
 fragment-expression = fragment-identifier
 ```
 
-
 ##### Literal Expression
 
 ```text
@@ -1181,19 +1180,19 @@ tuple-expression = "(" expression < "," expression > ")"
 ##### Array Expression
 
 ```text
-array-expression = "[" [ expression { "," expression } ] "]"
+array-expression = [ "mut" ] "[" [ expression { "," expression } ] "]"
 ```
 
 ##### Set Expression
 
 ```text
-set-expression = "#" "{" [ expression { "," expression } ] "}"
+set-expression = [ "mut" ] "#" "{" [ expression { "," expression } ] "}"
 ```
 
 ##### Map Expression
 
 ```text
-map-expression = "#" "[" [ map-expression-pair { "," map-expression-pair } ] "]"
+map-expression = [ "mut" ] "#" "[" [ map-expression-pair { "," map-expression-pair } ] "]"
 map-expression-pair = expression ":" expression
 ```
 
