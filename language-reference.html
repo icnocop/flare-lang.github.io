@@ -992,13 +992,13 @@ expression-field = [ &quot;mut&quot; ] value-identifier &quot;=&quot; expression
 <pre><code class="lang-text">tuple-expression = &quot;(&quot; expression &lt; &quot;,&quot; expression &gt; &quot;)&quot;
 </code></pre>
 <h5 id="array-expression">Array Expression</h5>
-<pre><code class="lang-text">array-expression = &quot;[&quot; [ expression { &quot;,&quot; expression } ] &quot;]&quot;
+<pre><code class="lang-text">array-expression = [ &quot;mut&quot; ] &quot;[&quot; [ expression { &quot;,&quot; expression } ] &quot;]&quot;
 </code></pre>
 <h5 id="set-expression">Set Expression</h5>
-<pre><code class="lang-text">set-expression = &quot;#&quot; &quot;{&quot; [ expression { &quot;,&quot; expression } ] &quot;}&quot;
+<pre><code class="lang-text">set-expression = [ &quot;mut&quot; ] &quot;#&quot; &quot;{&quot; [ expression { &quot;,&quot; expression } ] &quot;}&quot;
 </code></pre>
 <h5 id="map-expression">Map Expression</h5>
-<pre><code class="lang-text">map-expression = &quot;#&quot; &quot;[&quot; [ map-expression-pair { &quot;,&quot; map-expression-pair } ] &quot;]&quot;
+<pre><code class="lang-text">map-expression = [ &quot;mut&quot; ] &quot;#&quot; &quot;[&quot; [ map-expression-pair { &quot;,&quot; map-expression-pair } ] &quot;]&quot;
 map-expression-pair = expression &quot;:&quot; expression
 </code></pre>
 <h5 id="block-expression">Block Expression</h5>
