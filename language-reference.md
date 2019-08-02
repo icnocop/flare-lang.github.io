@@ -403,7 +403,7 @@ fn foo() {
 
 Though not strictly required, by convention, a module's full name should
 correspond to its location on the file system, but with lowercase letters. The
-above module would be located at `a/b.fl`. The module loader in the runtime
+above module would be located at `A/B.fl`. The module loader in the runtime
 system follows this convention when looking for modules that have not been
 explicitly loaded ahead of time.
 
@@ -476,8 +476,9 @@ These are the types that Flare supports:
   Examples: `12.34`, `-42.0`, `1.2e-3`.
 * String: An immutable sequence of Unicode scalars encoded as UTF-8. Examples:
   `"foo"`, `"\tbar"`, `"b\u000061z"`.
-* Module: A loaded module. Typically referred to by a module path such as
-  `Core::IO`. Module values behave similarly to records with immutable fields.
+* Module: A module path. Typically referred to by a module path expression such
+  as `Core::IO`. Module values are functionally similar to records containing
+  only immutable fields.
 * Function: A callable function as a value. Carries information such as its
   originating module, name (if any), and arity. Example: `fn(x) => x * x`.
 * Record: Similar to objects in other languages, a record is a collection of
@@ -710,32 +711,30 @@ Flare has a simple expression-based macro system allowing the inline expansion
 of code wherever a macro is invoked. Callers can pass code fragments to a macro
 which can use them to compose more complex expressions.
 
-For example, the `while` expression could be expressed like this:
+For example, one could define a `while` expression that collects the results of
+each execution of the body expression into an array (as opposed to the regular
+`while` expression which returns `nil`):
 
 ```flare
-macro my_while($cond, $body) {
-    while true {
-        if !$cond {
-            break;
-        };
+macro collect_while($cond, $body) {
+    let mut arr = [];
 
-        $body;
+    while $cond {
+        arr = arr ~ [$body];
     };
+
+    arr;
 }
 ```
 
-With this, the following two loops are equivalent:
+This macro can then be used like this:
 
 ```flare
 let mut x = 0;
-while x < 5 {
-    x = x + 1;
-};
-
-let mut x = 0;
-my_while!(x < 5, {
+let arr = collect_while!(x < 5, {
     x = x + 1;
 });
+assert arr == [1, 2, 3, 4, 5];
 ```
 
 Macros are hygienic: Variables introduced in a macro are not visible to
