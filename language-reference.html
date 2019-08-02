@@ -8,7 +8,7 @@
     <title>Language Reference | Flare Programming Language </title>
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Language Reference | Flare Programming Language ">
-    <meta name="generator" content="docfx 2.43.3.0">
+    <meta name="generator" content="docfx 2.44.0.0">
     
     <link rel="shortcut icon" href="images/favicon.png">
     <link rel="stylesheet" href="styles/docfx.vendor.css">
@@ -410,7 +410,7 @@ fn foo() {
 </code></pre>
 <p>Though not strictly required, by convention, a module's full name should
 correspond to its location on the file system, but with lowercase letters. The
-above module would be located at <code>a/b.fl</code>. The module loader in the runtime
+above module would be located at <code>A/B.fl</code>. The module loader in the runtime
 system follows this convention when looking for modules that have not been
 explicitly loaded ahead of time.</p>
 <p>Modules can import other modules:</p>
@@ -470,8 +470,9 @@ markers or tags. Examples: <code>:foo</code>, <code>Bar</code>, <code>:$baz</cod
 Examples: <code>12.34</code>, <code>-42.0</code>, <code>1.2e-3</code>.</li>
 <li>String: An immutable sequence of Unicode scalars encoded as UTF-8. Examples:
 <code>&quot;foo&quot;</code>, <code>&quot;\tbar&quot;</code>, <code>&quot;b\u000061z&quot;</code>.</li>
-<li>Module: A loaded module. Typically referred to by a module path such as
-<code>Core::IO</code>. Module values behave similarly to records with immutable fields.</li>
+<li>Module: A module path. Typically referred to by a module path expression such
+as <code>Core::IO</code>. Module values are functionally similar to records containing
+only immutable fields.</li>
 <li>Function: A callable function as a value. Carries information such as its
 originating module, name (if any), and arity. Example: <code>fn(x) =&gt; x * x</code>.</li>
 <li>Record: Similar to objects in other languages, a record is a collection of
@@ -675,27 +676,25 @@ fn bar() {
 <p>Flare has a simple expression-based macro system allowing the inline expansion
 of code wherever a macro is invoked. Callers can pass code fragments to a macro
 which can use them to compose more complex expressions.</p>
-<p>For example, the <code>while</code> expression could be expressed like this:</p>
-<pre><code class="lang-flare">macro my_while($cond, $body) {
-    while true {
-        if !$cond {
-            break;
-        };
+<p>For example, one could define a <code>while</code> expression that collects the results of
+each execution of the body expression into an array (as opposed to the regular
+<code>while</code> expression which returns <code>nil</code>):</p>
+<pre><code class="lang-flare">macro collect_while($cond, $body) {
+    let mut arr = [];
 
-        $body;
+    while $cond {
+        arr = arr ~ [$body];
     };
+
+    arr;
 }
 </code></pre>
-<p>With this, the following two loops are equivalent:</p>
+<p>This macro can then be used like this:</p>
 <pre><code class="lang-flare">let mut x = 0;
-while x &lt; 5 {
-    x = x + 1;
-};
-
-let mut x = 0;
-my_while!(x &lt; 5, {
+let arr = collect_while!(x &lt; 5, {
     x = x + 1;
 });
+assert arr == [1, 2, 3, 4, 5];
 </code></pre>
 <p>Macros are hygienic: Variables introduced in a macro are not visible to
 callers, and macros cannot refer to variables in callers unless they are
