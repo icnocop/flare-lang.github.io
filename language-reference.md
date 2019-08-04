@@ -741,10 +741,8 @@ Macros are hygienic: Variables introduced in a macro are not visible to
 callers, and macros cannot refer to variables in callers unless they are
 explicitly passed to the macro as part of its fragment parameters.
 
-Macros are expanded when a module is loaded. This means that even if a module
-containing a macro is reloaded, it will not trigger re-expansion of that macro
-in other modules. Macros can invoke other macros. Circular invocation of macros
-is considered an error.
+Macros are expanded when a module is loaded. Macros can invoke other macros.
+Circular invocation of macros is considered an error.
 
 ### Agents and Message Passing
 
