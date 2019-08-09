@@ -258,6 +258,7 @@ used-keyword = &quot;and&quot; |
                &quot;rec&quot; |
                &quot;recv&quot; |
                &quot;return&quot; |
+               &quot;test&quot; |
                &quot;use&quot; |
                &quot;while&quot;
 reserved-keyword = &quot;asm&quot; |
@@ -268,7 +269,6 @@ reserved-keyword = &quot;asm&quot; |
                    &quot;pragma&quot; |
                    &quot;quote&quot; |
                    &quot;super&quot; |
-                   &quot;test&quot; |
                    &quot;try&quot; |
                    &quot;unquote&quot; |
                    &quot;yield&quot;
@@ -699,10 +699,8 @@ assert arr == [1, 2, 3, 4, 5];
 <p>Macros are hygienic: Variables introduced in a macro are not visible to
 callers, and macros cannot refer to variables in callers unless they are
 explicitly passed to the macro as part of its fragment parameters.</p>
-<p>Macros are expanded when a module is loaded. This means that even if a module
-containing a macro is reloaded, it will not trigger re-expansion of that macro
-in other modules. Macros can invoke other macros. Circular invocation of macros
-is considered an error.</p>
+<p>Macros are expanded when a module is loaded. Macros can invoke other macros.
+Circular invocation of macros is considered an error.</p>
 <h3 id="agents-and-message-passing">Agents and Message Passing</h3>
 <p>Where other languages might use operating system threads for concurrency, Flare
 uses so-called agents. These are lightweight threads (also known as green
@@ -821,6 +819,7 @@ module-path = module-identifier { &quot;::&quot; module-identifier }
 </code></pre>
 <h3 id="declarations">Declarations</h3>
 <pre><code class="lang-text">declaration = { attribute } ( use-declaration |
+                              test-declaration |
                               constant-declaration |
                               function-declaration |
                               extern-declaration |
@@ -829,6 +828,9 @@ visibility = &quot;priv&quot; | &quot;pub&quot;
 </code></pre>
 <h4 id="use-declaration">Use Declaration</h4>
 <pre><code class="lang-text">use-declaration = &quot;use&quot; module-path [ &quot;as&quot; module-identifier ] &quot;;&quot;
+</code></pre>
+<h4 id="test-declaration">Test Declaration</h4>
+<pre><code class="lang-text">test-declaration = &quot;test&quot; value-identifier block-expression
 </code></pre>
 <h4 id="constant-declaration">Constant Declaration</h4>
 <pre><code class="lang-text">constant-declaration = [ visibility ] &quot;const&quot; value-identifier &quot;=&quot; expression &quot;;&quot;
