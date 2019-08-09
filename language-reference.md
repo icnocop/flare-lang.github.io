@@ -233,6 +233,7 @@ used-keyword = "and" |
                "rec" |
                "recv" |
                "return" |
+               "test" |
                "use" |
                "while"
 reserved-keyword = "asm" |
@@ -243,7 +244,6 @@ reserved-keyword = "asm" |
                    "pragma" |
                    "quote" |
                    "super" |
-                   "test" |
                    "try" |
                    "unquote" |
                    "yield"
@@ -892,6 +892,7 @@ attribute = "@" "[" value-identifier "=" literal "]"
 
 ```text
 declaration = { attribute } ( use-declaration |
+                              test-declaration |
                               constant-declaration |
                               function-declaration |
                               extern-declaration |
@@ -903,6 +904,12 @@ visibility = "priv" | "pub"
 
 ```text
 use-declaration = "use" module-path [ "as" module-identifier ] ";"
+```
+
+#### Test Declaration
+
+```text
+test-declaration = "test" value-identifier block-expression
 ```
 
 #### Constant Declaration
