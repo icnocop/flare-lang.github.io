@@ -758,7 +758,7 @@ Agents can be spawned with the `Core::Agent::spawn` function:
 ```flare
 use Core::Agent;
 
-fn main(_args, _env) {
+pub fn main(_args, _env) {
     let agent = spawn(fn(x, y, z) => {
         println(x); ' `"abc"`
         println(y); ' `:foo`
@@ -777,7 +777,7 @@ proceed immediately if no matching message is pending. Example:
 use Core::Agent;
 use Core::Time;
 
-fn main(_args, _env) {
+pub fn main(_args, _env) {
     let calc = spawn(fn() => {
         while true {
             recv {
@@ -851,7 +851,8 @@ jeopardize the integrity of the whole process.
 A normal Flare program will begin in the special `main` function:
 
 ```flare
-fn main(args, env) {
+pub fn main(args, env) {
+    nil;
 }
 ```
 
