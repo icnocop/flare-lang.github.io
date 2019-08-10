@@ -711,7 +711,7 @@ each other.</p>
 <p>Agents can be spawned with the <code>Core::Agent::spawn</code> function:</p>
 <pre><code class="lang-flare">use Core::Agent;
 
-fn main(_args, _env) {
+pub fn main(_args, _env) {
     let agent = spawn(fn(x, y, z) =&gt; {
         println(x); ' `&quot;abc&quot;`
         println(y); ' `:foo`
@@ -727,7 +727,7 @@ proceed immediately if no matching message is pending. Example:</p>
 <pre><code class="lang-flare">use Core::Agent;
 use Core::Time;
 
-fn main(_args, _env) {
+pub fn main(_args, _env) {
     let calc = spawn(fn() =&gt; {
         while true {
             recv {
@@ -790,7 +790,8 @@ design ensures that sandboxed agents cannot perform unsafe operations that could
 jeopardize the integrity of the whole process.</p>
 <h3 id="startup-and-termination">Startup and Termination</h3>
 <p>A normal Flare program will begin in the special <code>main</code> function:</p>
-<pre><code class="lang-flare">fn main(args, env) {
+<pre><code class="lang-flare">pub fn main(args, env) {
+    nil;
 }
 </code></pre>
 <p>This function is invoked by the runtime system after the runtime has been
