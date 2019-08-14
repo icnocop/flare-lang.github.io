@@ -386,7 +386,7 @@ Flare language.
 ### Modules and Declarations
 
 A Flare program is a collection of modules, each containing various kinds of
-declarations such as constants, functions, macros, etc. The module is the
+declarations such as constants, functions, macros, tests, etc. The module is the
 primary means of code organization, enabling separation of concerns and code
 reuse.
 
@@ -402,10 +402,9 @@ fn foo() {
 ```
 
 Though not strictly required, by convention, a module's full name should
-correspond to its location on the file system, but with lowercase letters. The
-above module would be located at `A/B.fl`. The module loader in the runtime
-system follows this convention when looking for modules that have not been
-explicitly loaded ahead of time.
+correspond to its location on the file system. The above module would be located
+at `A/B.fl`. The module loader in the runtime system follows this convention
+when looking for modules.
 
 Modules can import other modules:
 
@@ -443,13 +442,17 @@ extern bar(x, y, z);
 priv macro baz($x, $y, z) {
     $x * $y + z;
 }
+
+test qux {
+    assert true;
+}
 ```
 
-Visibility specifiers can be used on all declarations except `use` declarations.
-The default is `priv` if none is specified. Visibility is strictly enforced;
-there is no way to get at the private declarations in a module - not even
-through introspection. This is an important aspect of the sandboxing
-capabilities of Flare.
+Visibility specifiers can be used on all declarations except `use` and `test`
+declarations. The default is `priv` if none is specified. Visibility is strictly
+enforced; there is no way to get at the private declarations in a module - not
+even through introspection. This is an important aspect of Flare's sandboxing
+capabilities.
 
 ### Values and Types
 
@@ -476,9 +479,9 @@ These are the types that Flare supports:
   Examples: `12.34`, `-42.0`, `1.2e-3`.
 * String: An immutable sequence of Unicode scalars encoded as UTF-8. Examples:
   `"foo"`, `"\tbar"`, `"b\u000061z"`.
-* Module: A module path. Typically referred to by a module path expression such
-  as `Core::IO`. Module values are functionally similar to records containing
-  only immutable fields.
+* Module: A loaded module. Typically referred to by a module path expression
+  such as `Core::IO`. Module values are functionally similar to records
+  containing only immutable fields.
 * Function: A callable function as a value. Carries information such as its
   originating module, name (if any), and arity. Example: `fn(x) => x * x`.
 * Record: Similar to objects in other languages, a record is a collection of
