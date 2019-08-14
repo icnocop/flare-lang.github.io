@@ -397,7 +397,7 @@ following table:</p>
 Flare language.</p>
 <h3 id="modules-and-declarations">Modules and Declarations</h3>
 <p>A Flare program is a collection of modules, each containing various kinds of
-declarations such as constants, functions, macros, etc. The module is the
+declarations such as constants, functions, macros, tests, etc. The module is the
 primary means of code organization, enabling separation of concerns and code
 reuse.</p>
 <p>Each source file is a module. A header at the beginning of the file specifies
@@ -409,10 +409,9 @@ fn foo() {
 }
 </code></pre>
 <p>Though not strictly required, by convention, a module's full name should
-correspond to its location on the file system, but with lowercase letters. The
-above module would be located at <code>A/B.fl</code>. The module loader in the runtime
-system follows this convention when looking for modules that have not been
-explicitly loaded ahead of time.</p>
+correspond to its location on the file system. The above module would be located
+at <code>A/B.fl</code>. The module loader in the runtime system follows this convention
+when looking for modules.</p>
 <p>Modules can import other modules:</p>
 <pre><code class="lang-flare">mod A::B;
 
@@ -442,12 +441,16 @@ extern bar(x, y, z);
 priv macro baz($x, $y, z) {
     $x * $y + z;
 }
+
+test qux {
+    assert true;
+}
 </code></pre>
-<p>Visibility specifiers can be used on all declarations except <code>use</code> declarations.
-The default is <code>priv</code> if none is specified. Visibility is strictly enforced;
-there is no way to get at the private declarations in a module - not even
-through introspection. This is an important aspect of the sandboxing
-capabilities of Flare.</p>
+<p>Visibility specifiers can be used on all declarations except <code>use</code> and <code>test</code>
+declarations. The default is <code>priv</code> if none is specified. Visibility is strictly
+enforced; there is no way to get at the private declarations in a module - not
+even through introspection. This is an important aspect of Flare's sandboxing
+capabilities.</p>
 <h3 id="values-and-types">Values and Types</h3>
 <p>Being a dynamic language, Flare does not assign types to storage locations (such
 as variables and fields). Instead, values themselves have a type, and type
@@ -470,9 +473,9 @@ markers or tags. Examples: <code>:foo</code>, <code>Bar</code>, <code>:$baz</cod
 Examples: <code>12.34</code>, <code>-42.0</code>, <code>1.2e-3</code>.</li>
 <li>String: An immutable sequence of Unicode scalars encoded as UTF-8. Examples:
 <code>&quot;foo&quot;</code>, <code>&quot;\tbar&quot;</code>, <code>&quot;b\u000061z&quot;</code>.</li>
-<li>Module: A module path. Typically referred to by a module path expression such
-as <code>Core::IO</code>. Module values are functionally similar to records containing
-only immutable fields.</li>
+<li>Module: A loaded module. Typically referred to by a module path expression
+such as <code>Core::IO</code>. Module values are functionally similar to records
+containing only immutable fields.</li>
 <li>Function: A callable function as a value. Carries information such as its
 originating module, name (if any), and arity. Example: <code>fn(x) =&gt; x * x</code>.</li>
 <li>Record: Similar to objects in other languages, a record is a collection of
