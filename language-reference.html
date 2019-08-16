@@ -788,9 +788,9 @@ obviously does not make sense, so agent values use atomic reference counting
 rather than traditional tracing garbage collection.</p>
 <p>The Flare language has no built-in support for manual memory management. The
 core library has escape hatches that allow it, but these are only accessible
-from agents with the right reference value (passed to <code>main</code> initially). This
-design ensures that sandboxed agents cannot perform unsafe operations that could
-jeopardize the integrity of the whole process.</p>
+from agents with the right permission reference value. This design ensures that
+sandboxed agents cannot perform unsafe operations that could jeopardize the
+integrity of the whole process.</p>
 <h3 id="startup-and-termination">Startup and Termination</h3>
 <p>A normal Flare program will begin in the special <code>main</code> function:</p>
 <pre><code class="lang-flare">pub fn main(args, env) {
