@@ -845,9 +845,9 @@ rather than traditional tracing garbage collection.
 
 The Flare language has no built-in support for manual memory management. The
 core library has escape hatches that allow it, but these are only accessible
-from agents with the right reference value (passed to `main` initially). This
-design ensures that sandboxed agents cannot perform unsafe operations that could
-jeopardize the integrity of the whole process.
+from agents with the right permission reference value. This design ensures that
+sandboxed agents cannot perform unsafe operations that could jeopardize the
+integrity of the whole process.
 
 ### Startup and Termination
 
