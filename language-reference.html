@@ -246,7 +246,6 @@ used-keyword = &quot;and&quot; |
                &quot;in&quot; |
                &quot;let&quot; |
                &quot;loop&quot; |
-               &quot;macro&quot; |
                &quot;match&quot; |
                &quot;mod&quot; |
                &quot;mut&quot; |
@@ -266,6 +265,7 @@ reserved-keyword = &quot;asm&quot; |
                    &quot;await&quot; |
                    &quot;do&quot; |
                    &quot;goto&quot; |
+                   &quot;macro&quot; |
                    &quot;pragma&quot; |
                    &quot;quote&quot; |
                    &quot;super&quot; |
@@ -277,8 +277,7 @@ reserved-keyword = &quot;asm&quot; |
 <p>Identifiers are used for naming modules, functions, variables, etc. There are
 separate rules for module and value identifiers.</p>
 <pre><code class="lang-text">identifier = module-identifier |
-             value-identifier |
-             fragment-identifier
+             value-identifier
 </code></pre>
 <h4 id="module-identifiers">Module Identifiers</h4>
 <p>Module identifiers are sequences of alphanumeric characters, always starting
@@ -289,11 +288,6 @@ with an uppercase alphabetical character.</p>
 <p>Value identifiers (used for functions and variables) are sequences of lowercase
 alphanumeric and/or underscore (<code>_</code>) characters.</p>
 <pre><code class="lang-text">value-identifier = ( &quot;_&quot; | &quot;a&quot; .. &quot;z&quot; ) { &quot;0&quot; .. &quot;9&quot; | &quot;_&quot; | &quot;a&quot; .. &quot;z&quot; }
-</code></pre>
-<h4 id="fragment-identifiers">Fragment Identifiers</h4>
-<p>Fragment identifiers are similar to value identifiers but are prefixed with <code>$</code>.
-These are used for macro parameters.</p>
-<pre><code class="lang-text">fragment-identifier = &quot;$&quot; value-identifier
 </code></pre>
 <h3 id="literals">Literals</h3>
 <p>Literals are the fundamental building blocks of Flare expressions. These are the
@@ -397,7 +391,7 @@ following table:</p>
 Flare language.</p>
 <h3 id="modules-and-declarations">Modules and Declarations</h3>
 <p>A Flare program is a collection of modules, each containing various kinds of
-declarations such as constants, functions, macros, tests, etc. The module is the
+declarations such as constants, functions, tests, etc. The module is the
 primary means of code organization, enabling separation of concerns and code
 reuse.</p>
 <p>Each source file is a module. A header at the beginning of the file specifies
@@ -437,10 +431,6 @@ pub fn foo() {
 }
 
 extern bar(x, y, z);
-
-priv macro baz($x, $y, z) {
-    $x * $y + z;
-}
 
 test qux {
     assert true;
@@ -675,35 +665,6 @@ fn bar() {
     }
 }
 </code></pre>
-<h3 id="macros">Macros</h3>
-<p>Flare has a simple expression-based macro system allowing the inline expansion
-of code wherever a macro is invoked. Callers can pass code fragments to a macro
-which can use them to compose more complex expressions.</p>
-<p>For example, one could define a <code>while</code> expression that collects the results of
-each execution of the body expression into an array (as opposed to the regular
-<code>while</code> expression which returns <code>nil</code>):</p>
-<pre><code class="lang-flare">macro collect_while($cond, $body) {
-    let mut arr = [];
-
-    while $cond {
-        arr = arr ~ [$body];
-    };
-
-    arr;
-}
-</code></pre>
-<p>This macro can then be used like this:</p>
-<pre><code class="lang-flare">let mut x = 0;
-let arr = collect_while!(x &lt; 5, {
-    x = x + 1;
-});
-assert arr == [1, 2, 3, 4, 5];
-</code></pre>
-<p>Macros are hygienic: Variables introduced in a macro are not visible to
-callers, and macros cannot refer to variables in callers unless they are
-explicitly passed to the macro as part of its fragment parameters.</p>
-<p>Macros are expanded when a module is loaded. Macros can invoke other macros.
-Circular invocation of macros is considered an error.</p>
 <h3 id="agents-and-message-passing">Agents and Message Passing</h3>
 <p>Where other languages might use operating system threads for concurrency, Flare
 uses so-called agents. These are lightweight threads (also known as green
@@ -826,8 +787,7 @@ module-path = module-identifier { &quot;::&quot; module-identifier }
                               test-declaration |
                               constant-declaration |
                               function-declaration |
-                              extern-declaration |
-                              macro-declaration )
+                              extern-declaration
 visibility = &quot;priv&quot; | &quot;pub&quot;
 </code></pre>
 <h4 id="use-declaration">Use Declaration</h4>
@@ -847,11 +807,6 @@ variadic-function-parameter = &quot;,&quot; &quot;..&quot; function-parameter
 </code></pre>
 <h4 id="extern-declaration">Extern Declaration</h4>
 <pre><code class="lang-text">extern-declaration = [ visibility ] &quot;extern&quot; value-identifier function-parameter-list &quot;;&quot;
-</code></pre>
-<h4 id="macro-declaration">Macro Declaration</h4>
-<pre><code class="lang-text">macro-declaration = [ visibility ] &quot;macro&quot; value-identifier macro-parameter-list block-expression
-macro-parameter-list = &quot;(&quot; [ macro-parameter { &quot;,&quot; macro-parameter } ] &quot;)&quot;
-macro-parameter = { attribute } fragment-identifier
 </code></pre>
 <h3 id="statements">Statements</h3>
 <pre><code class="lang-text">statement = let-statement |
@@ -937,8 +892,6 @@ variadic-index = &quot;,&quot; &quot;..&quot; index
 <h4 id="primary-expressions">Primary Expressions</h4>
 <pre><code class="lang-text">primary-expression = ( parenthesized-expression |
                        identifier-expression |
-                       macro-call-expression |
-                       fragment-expression |
                        literal-expression |
                        lambda-expression |
                        module-expression |
@@ -966,13 +919,6 @@ variadic-index = &quot;,&quot; &quot;..&quot; index
 </code></pre>
 <h5 id="identifier-expression">Identifier Expression</h5>
 <pre><code class="lang-text">identifier-expression = value-identifier
-</code></pre>
-<h5 id="macro-call-expression">Macro Call Expression</h5>
-<pre><code class="lang-text">macro-call-expression = value-identifier &quot;!&quot; macro-argument-list
-macro-argument-list = &quot;(&quot; [ expression { &quot;,&quot; expression } ] &quot;)&quot;
-</code></pre>
-<h5 id="fragment-expression">Fragment Expression</h5>
-<pre><code class="lang-text">fragment-expression = fragment-identifier
 </code></pre>
 <h5 id="literal-expression">Literal Expression</h5>
 <pre><code class="lang-text">literal-expression = literal
