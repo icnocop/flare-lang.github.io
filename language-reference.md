@@ -221,7 +221,6 @@ used-keyword = "and" |
                "in" |
                "let" |
                "loop" |
-               "macro" |
                "match" |
                "mod" |
                "mut" |
@@ -241,6 +240,7 @@ reserved-keyword = "asm" |
                    "await" |
                    "do" |
                    "goto" |
+                   "macro" |
                    "pragma" |
                    "quote" |
                    "super" |
@@ -256,8 +256,7 @@ separate rules for module and value identifiers.
 
 ```text
 identifier = module-identifier |
-             value-identifier |
-             fragment-identifier
+             value-identifier
 ```
 
 #### Module Identifiers
@@ -276,15 +275,6 @@ alphanumeric and/or underscore (`_`) characters.
 
 ```text
 value-identifier = ( "_" | "a" .. "z" ) { "0" .. "9" | "_" | "a" .. "z" }
-```
-
-#### Fragment Identifiers
-
-Fragment identifiers are similar to value identifiers but are prefixed with `$`.
-These are used for macro parameters.
-
-```text
-fragment-identifier = "$" value-identifier
 ```
 
 ### Literals
@@ -386,7 +376,7 @@ Flare language.
 ### Modules and Declarations
 
 A Flare program is a collection of modules, each containing various kinds of
-declarations such as constants, functions, macros, tests, etc. The module is the
+declarations such as constants, functions, tests, etc. The module is the
 primary means of code organization, enabling separation of concerns and code
 reuse.
 
@@ -438,10 +428,6 @@ pub fn foo() {
 }
 
 extern bar(x, y, z);
-
-priv macro baz($x, $y, z) {
-    $x * $y + z;
-}
 
 test qux {
     assert true;
@@ -708,45 +694,6 @@ fn bar() {
 }
 ```
 
-### Macros
-
-Flare has a simple expression-based macro system allowing the inline expansion
-of code wherever a macro is invoked. Callers can pass code fragments to a macro
-which can use them to compose more complex expressions.
-
-For example, one could define a `while` expression that collects the results of
-each execution of the body expression into an array (as opposed to the regular
-`while` expression which returns `nil`):
-
-```flare
-macro collect_while($cond, $body) {
-    let mut arr = [];
-
-    while $cond {
-        arr = arr ~ [$body];
-    };
-
-    arr;
-}
-```
-
-This macro can then be used like this:
-
-```flare
-let mut x = 0;
-let arr = collect_while!(x < 5, {
-    x = x + 1;
-});
-assert arr == [1, 2, 3, 4, 5];
-```
-
-Macros are hygienic: Variables introduced in a macro are not visible to
-callers, and macros cannot refer to variables in callers unless they are
-explicitly passed to the macro as part of its fragment parameters.
-
-Macros are expanded when a module is loaded. Macros can invoke other macros.
-Circular invocation of macros is considered an error.
-
 ### Agents and Message Passing
 
 Where other languages might use operating system threads for concurrency, Flare
@@ -899,8 +846,7 @@ declaration = { attribute } ( use-declaration |
                               test-declaration |
                               constant-declaration |
                               function-declaration |
-                              extern-declaration |
-                              macro-declaration )
+                              extern-declaration
 visibility = "priv" | "pub"
 ```
 
@@ -935,14 +881,6 @@ variadic-function-parameter = "," ".." function-parameter
 
 ```text
 extern-declaration = [ visibility ] "extern" value-identifier function-parameter-list ";"
-```
-
-#### Macro Declaration
-
-```text
-macro-declaration = [ visibility ] "macro" value-identifier macro-parameter-list block-expression
-macro-parameter-list = "(" [ macro-parameter { "," macro-parameter } ] ")"
-macro-parameter = { attribute } fragment-identifier
 ```
 
 ### Statements
@@ -1095,8 +1033,6 @@ field-access-expression = "." value-identifier
 ```text
 primary-expression = ( parenthesized-expression |
                        identifier-expression |
-                       macro-call-expression |
-                       fragment-expression |
                        literal-expression |
                        lambda-expression |
                        module-expression |
@@ -1130,19 +1066,6 @@ parenthesized-expression = "(" expression ")"
 
 ```text
 identifier-expression = value-identifier
-```
-
-##### Macro Call Expression
-
-```text
-macro-call-expression = value-identifier "!" macro-argument-list
-macro-argument-list = "(" [ expression { "," expression } ] ")"
-```
-
-##### Fragment Expression
-
-```text
-fragment-expression = fragment-identifier
 ```
 
 ##### Literal Expression
