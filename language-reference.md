@@ -1182,7 +1182,7 @@ break-expression = "break"
 ##### Receive Expression
 
 ```text
-recv-expression = "recv" "{" { pattern-arm } "}" [ recv-expression-else ]
+recv-expression = "recv" "{" < pattern-arm > "}" [ recv-expression-else ]
 recv-expression-else = "else" block-expression
 ```
 
