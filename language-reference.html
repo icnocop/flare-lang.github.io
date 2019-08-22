@@ -601,23 +601,23 @@ let [1, 2, 3] as e = foo();
 
 match bar() {
     ' Match the `&quot;foo&quot;` string constant.
-    &quot;foo&quot; =&gt; println(&quot;foo string&quot;)
+    &quot;foo&quot; =&gt; println(&quot;foo string&quot;);
 
     ' Match a record containing the fields `x` and `y`. Bind `x1` and `y1` to
     ' those fields, respectively.
-    rec { x = x1, y = y1 } =&gt; println(&quot;x = {}, y = {}&quot;, x1, y1)
+    rec { x = x1, y = y1 } =&gt; println(&quot;x = {}, y = {}&quot;, x1, y1);
 
     ' Match an exception containing the field `message` and bind `msg` to it.
-    exc SomeError { message = msg } =&gt; println(&quot;error: {}&quot;, msg)
+    exc SomeError { message = msg } =&gt; println(&quot;error: {}&quot;, msg);
 
     ' Match the `nil` constant.
-    nil =&gt; println(&quot;nil&quot;)
+    nil =&gt; println(&quot;nil&quot;);
 
     ' Match an integer above `42`. Bind `i` to the value.
-    i if is_integer(i) and i &gt; 42 =&gt; println(&quot;integer over 42&quot;)
+    i if is_integer(i) and i &gt; 42 =&gt; println(&quot;integer over 42&quot;);
 
     ' Fallback case.
-    _ =&gt; println(&quot;something else&quot;)
+    _ =&gt; println(&quot;something else&quot;);
 };
 </code></pre>
 <p>A failed match in a <code>let</code> statement will result in a panic, as will a failed
@@ -636,8 +636,8 @@ caught using the <code>catch</code> clause. An example:</p>
 
 fn bar() {
     foo()? catch {
-        exc MyError { message = msg } =&gt; println(&quot;error: {}&quot;, msg)
-        ex =&gt; println(&quot;some other error&quot;)
+        exc MyError { message = msg } =&gt; println(&quot;error: {}&quot;, msg);
+        ex =&gt; println(&quot;some other error&quot;);
     };
 }
 </code></pre>
@@ -655,13 +655,13 @@ fn bar() {
     foo()?; ' OK; propagatates exception to the caller of `bar`.
 
     foo()? catch {
-        _ =&gt; nil ' OK; exception was handled.
+        _ =&gt; nil; ' OK; exception was handled.
     };
 
     foo(); ' Panic: Unobserved 'MyError' exception.
 
     foo()? catch {
-        exc OtherError { } =&gt; nil ' Panic: Unhandled 'MyError' exception.
+        exc OtherError { } =&gt; nil; ' Panic: Unhandled 'MyError' exception.
     }
 }
 </code></pre>
@@ -696,9 +696,9 @@ pub fn main(_args, _env) {
         while true {
             recv {
                 (sender, :add, x, y) =&gt;
-                    sender &lt;- (:result, x + y)
+                    sender &lt;- (:result, x + y);
                 :exit =&gt;
-                    break
+                    break;
             } else {
                 ' Only process messages every second.
                 sleep(seconds(1));
@@ -712,7 +712,7 @@ pub fn main(_args, _env) {
         (:result, z) =&gt; {
             println(z); ' 42
             calc &lt;- :exit;
-        }
+        };
     };
 }
 </code></pre>
@@ -875,7 +875,7 @@ argument = expression
 variadic-argument = &quot;,&quot; &quot;..&quot; argument
 call-try = &quot;?&quot; [ call-try-catch ]
 call-try-catch = &quot;catch&quot; &quot;{&quot; &lt; call-try-catch-arm &gt; &quot;}&quot;
-call-try-catch-arm = try-catch-pattern [ pattern-arm-guard ] &quot;=&gt;&quot; expression
+call-try-catch-arm = try-catch-pattern [ pattern-arm-guard ] &quot;=&gt;&quot; expression &quot;;&quot;
 </code></pre>
 <h5 id="method-call-expression">Method Call Expression</h5>
 <pre><code class="lang-text">method-call-expression = &quot;-&gt;&quot; value-identifier argument-list [ call-try ]
@@ -961,11 +961,11 @@ if-expression-else = &quot;else&quot; ( block-expression | if-expression )
 </code></pre>
 <h5 id="condition-expression">Condition Expression</h5>
 <pre><code class="lang-text">cond-expression = &quot;cond&quot; &quot;{&quot; &lt; cond-expression-arm &gt; &quot;}&quot;
-cond-expression-arm = expression &quot;=&gt;&quot; expression
+cond-expression-arm = expression &quot;=&gt;&quot; expression &quot;;&quot;
 </code></pre>
 <h5 id="match-expression">Match Expression</h5>
 <pre><code class="lang-text">match-expression = &quot;match&quot; expression &quot;{&quot; &lt; pattern-arm &gt; &quot;}&quot;
-pattern-arm = pattern [ pattern-arm-guard ] &quot;=&gt;&quot; expression
+pattern-arm = pattern [ pattern-arm-guard ] &quot;=&gt;&quot; expression &quot;;&quot;
 pattern-arm-guard = &quot;if&quot; expression
 </code></pre>
 <h5 id="for-expression">For Expression</h5>
