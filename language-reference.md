@@ -619,23 +619,23 @@ let [1, 2, 3] as e = foo();
 
 match bar() {
     ' Match the `"foo"` string constant.
-    "foo" => println("foo string")
+    "foo" => println("foo string");
 
     ' Match a record containing the fields `x` and `y`. Bind `x1` and `y1` to
     ' those fields, respectively.
-    rec { x = x1, y = y1 } => println("x = {}, y = {}", x1, y1)
+    rec { x = x1, y = y1 } => println("x = {}, y = {}", x1, y1);
 
     ' Match an exception containing the field `message` and bind `msg` to it.
-    exc SomeError { message = msg } => println("error: {}", msg)
+    exc SomeError { message = msg } => println("error: {}", msg);
 
     ' Match the `nil` constant.
-    nil => println("nil")
+    nil => println("nil");
 
     ' Match an integer above `42`. Bind `i` to the value.
-    i if is_integer(i) and i > 42 => println("integer over 42")
+    i if is_integer(i) and i > 42 => println("integer over 42");
 
     ' Fallback case.
-    _ => println("something else")
+    _ => println("something else");
 };
 ```
 
@@ -660,8 +660,8 @@ fn foo() {
 
 fn bar() {
     foo()? catch {
-        exc MyError { message = msg } => println("error: {}", msg)
-        ex => println("some other error")
+        exc MyError { message = msg } => println("error: {}", msg);
+        ex => println("some other error");
     };
 }
 ```
@@ -683,13 +683,13 @@ fn bar() {
     foo()?; ' OK; propagatates exception to the caller of `bar`.
 
     foo()? catch {
-        _ => nil ' OK; exception was handled.
+        _ => nil; ' OK; exception was handled.
     };
 
     foo(); ' Panic: Unobserved 'MyError' exception.
 
     foo()? catch {
-        exc OtherError { } => nil ' Panic: Unhandled 'MyError' exception.
+        exc OtherError { } => nil; ' Panic: Unhandled 'MyError' exception.
     }
 }
 ```
@@ -732,9 +732,9 @@ pub fn main(_args, _env) {
         while true {
             recv {
                 (sender, :add, x, y) =>
-                    sender <- (:result, x + y)
+                    sender <- (:result, x + y);
                 :exit =>
-                    break
+                    break;
             } else {
                 ' Only process messages every second.
                 sleep(seconds(1));
@@ -748,7 +748,7 @@ pub fn main(_args, _env) {
         (:result, z) => {
             println(z); ' 42
             calc <- :exit;
-        }
+        };
     };
 }
 ```
@@ -1004,7 +1004,7 @@ argument = expression
 variadic-argument = "," ".." argument
 call-try = "?" [ call-try-catch ]
 call-try-catch = "catch" "{" < call-try-catch-arm > "}"
-call-try-catch-arm = try-catch-pattern [ pattern-arm-guard ] "=>" expression
+call-try-catch-arm = try-catch-pattern [ pattern-arm-guard ] "=>" expression ";"
 ```
 
 ##### Method Call Expression
@@ -1144,14 +1144,14 @@ if-expression-else = "else" ( block-expression | if-expression )
 
 ```text
 cond-expression = "cond" "{" < cond-expression-arm > "}"
-cond-expression-arm = expression "=>" expression
+cond-expression-arm = expression "=>" expression ";"
 ```
 
 ##### Match Expression
 
 ```text
 match-expression = "match" expression "{" < pattern-arm > "}"
-pattern-arm = pattern [ pattern-arm-guard ] "=>" expression
+pattern-arm = pattern [ pattern-arm-guard ] "=>" expression ";"
 pattern-arm-guard = "if" expression
 ```
 
