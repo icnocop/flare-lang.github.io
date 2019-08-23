@@ -1137,7 +1137,7 @@ block-expression = "{" < statement > "}"
 
 ```text
 if-expression = "if" expression block-expression [ if-expression-else ]
-if-expression-else = "else" ( block-expression | if-expression )
+if-expression-else = "else" block-expression
 ```
 
 ##### Condition Expression
