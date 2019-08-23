@@ -144,8 +144,7 @@ custom-operator = custom-multiplicative-operator |
                   custom-additive-operator |
                   custom-shift-operator |
                   custom-bitwise-operator
-special-operator = "!" |
-                   "!=" |
+special-operator = "!=" |
                    "<" |
                    "<=" |
                    "=" |
