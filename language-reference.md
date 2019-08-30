@@ -1263,19 +1263,19 @@ exception-pattern = "exc" module-identifier "{" [ pattern-field { "," pattern-fi
 #### Array Pattern
 
 ```text
-array-pattern = "[" [ pattern { "," pattern } ] "]" [ pattern-remainder ]
-pattern-remainder = "::" pattern
+array-pattern = "[" [ pattern { "," pattern } ] "]" [ array-pattern-remainder ]
+array-pattern-remainder = "::" pattern
 ```
 
 #### Set Pattern
 
 ```text
-set-pattern = "#" "{" [ expression { "," expression } ] "}" [ pattern-remainder ]
+set-pattern = "#" "{" [ expression { "," expression } ] "}"
 ```
 
 #### Map Pattern
 
 ```text
-map-pattern = "#" "[" [ map-pattern-pair { "," map-pattern-pair } ] "]" [ pattern-remainder ]
+map-pattern = "#" "[" [ map-pattern-pair { "," map-pattern-pair } ] "]"
 map-pattern-pair = expression ":" pattern
 ```
