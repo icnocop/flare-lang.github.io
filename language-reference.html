@@ -1029,14 +1029,14 @@ pattern-field = value-identifier &quot;=&quot; pattern
 <pre><code class="lang-text">exception-pattern = &quot;exc&quot; module-identifier &quot;{&quot; [ pattern-field { &quot;,&quot; pattern-field } ] &quot;}&quot;
 </code></pre>
 <h4 id="array-pattern">Array Pattern</h4>
-<pre><code class="lang-text">array-pattern = &quot;[&quot; [ pattern { &quot;,&quot; pattern } ] &quot;]&quot; [ pattern-remainder ]
-pattern-remainder = &quot;::&quot; pattern
+<pre><code class="lang-text">array-pattern = &quot;[&quot; [ pattern { &quot;,&quot; pattern } ] &quot;]&quot; [ array-pattern-remainder ]
+array-pattern-remainder = &quot;::&quot; pattern
 </code></pre>
 <h4 id="set-pattern">Set Pattern</h4>
-<pre><code class="lang-text">set-pattern = &quot;#&quot; &quot;{&quot; [ expression { &quot;,&quot; expression } ] &quot;}&quot; [ pattern-remainder ]
+<pre><code class="lang-text">set-pattern = &quot;#&quot; &quot;{&quot; [ expression { &quot;,&quot; expression } ] &quot;}&quot;
 </code></pre>
 <h4 id="map-pattern">Map Pattern</h4>
-<pre><code class="lang-text">map-pattern = &quot;#&quot; &quot;[&quot; [ map-pattern-pair { &quot;,&quot; map-pattern-pair } ] &quot;]&quot; [ pattern-remainder ]
+<pre><code class="lang-text">map-pattern = &quot;#&quot; &quot;[&quot; [ map-pattern-pair { &quot;,&quot; map-pattern-pair } ] &quot;]&quot;
 map-pattern-pair = expression &quot;:&quot; pattern
 </code></pre>
 </article>
