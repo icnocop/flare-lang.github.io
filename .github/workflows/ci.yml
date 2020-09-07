@@ -7,6 +7,9 @@ on:
             - opened
             - reopened
             - synchronize
+defaults:
+    run:
+        shell: bash
 jobs:
     ci:
         runs-on: windows-latest
@@ -15,35 +18,29 @@ jobs:
             - name: Clone repository
               uses: actions/checkout@v2.3.2
             - name: Fetch full history
-              shell: pwsh
               run: |
                   git fetch origin --unshallow
             - name: Install dependencies
-              shell: pwsh
               run: |
                   npm install markdownlint-cli -g
                   choco install docfx -y
             - name: Lint Markdown files
-              shell: pwsh
               run: |
                   ./lint.ps1
             - name: Build website
-              shell: pwsh
               run: |
                   ./build.ps1
             - name: Deploy website
-              if: github.event_name == 'push'
-              shell: bash
+              if: github.event_name == 'push' && github.ref == 'refs/heads/master'
               run: |
                   git config --global user.name "github-actions"
-                  git config --global user.email "alex@alexrp.com"
+                  git config --global user.email "bot@flare-lang.org"
                   sha=$(git rev-parse -q --verify HEAD)
                   git checkout origin/live -b live
                   git rm "*" -fr
                   git checkout HEAD -- .gitattributes .nojekyll CNAME
                   mv build/* .
-                  rm -fr build obj
+                  rm build obj -fr
                   git add -A
                   git commit -m "CI: Deploy $sha."
                   git push origin live
-                  git checkout master
