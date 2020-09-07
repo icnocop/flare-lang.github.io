@@ -2,7 +2,8 @@
 
 {
     "build": {
-        "dest": "build",
+        "globalMetadataFiles": "global.json",
+        "dest": "build/web",
         "content": [
             {
                 "files": [
@@ -15,8 +16,6 @@
                 ]
             }
         ],
-        "globalMetadataFiles": "global.json",
-        "markdownEngineName": "markdig",
         "resource": [
             {
                 "files": [
@@ -27,6 +26,32 @@
         "template": [
             "statictoc",
             "theme"
-        ]
+        ],
+        "markdownEngineName": "markdig"
+    },
+    "pdf": {
+        "dest": "build/pdf",
+        "content": [
+            {
+                "files": [
+                    "pdf/toc.yml",
+                    "pdf/*.md",
+                    "language-reference.md"
+                ]
+            }
+        ],
+        "resource": [
+            {
+                "files": [
+                    "images/**"
+                ]
+            }
+        ],
+        "name": "flare",
+        "outline": "WkDefaultOutline",
+        "excludeDefaultToc": true,
+        "wkhtmltopdf": {
+            "additionalArguments": "--enable-local-file-access"
+        }
     }
 }

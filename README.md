@@ -12,6 +12,7 @@ Requirements:
 
 * [PowerShell Core](https://github.com/PowerShell/PowerShell)
 * [DocFX](https://dotnet.github.io/docfx)
+* [wkhtmltopdf](https://wkhtmltopdf.org)
 * [markdownlint-cli](https://github.com/igorshubovych/markdownlint-cli)
 
 Run `./build.ps1` to produce the website in the `build` directory.

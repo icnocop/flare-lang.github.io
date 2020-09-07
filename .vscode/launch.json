@@ -8,7 +8,7 @@
             "preLaunchTask": "build",
             "type": "chrome",
             "request": "launch",
-            "file": "${workspaceFolder}/build/index.html"
+            "file": "${workspaceFolder}/build/web/index.html"
         }
     ]
 }

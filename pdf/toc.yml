@@ -1,0 +1,4 @@
+- name: Cover
+  href: cover.md
+- name: Language Reference
+  href: ../language-reference.md
