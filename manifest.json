@@ -28,12 +28,15 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "InvalidFileLink"
+      ],
       "type": "Conceptual",
       "source_relative_path": "documentation.md",
       "output": {
         ".html": {
           "relative_path": "documentation.html",
-          "hash": "ECI1i9TVFS8O/+Iaqqdk0Q=="
+          "hash": "3y0F2c5gFOD4G80LhXbhaQ=="
         }
       },
       "is_incremental": false,
