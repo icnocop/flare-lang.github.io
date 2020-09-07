@@ -1,0 +1,14 @@
+// Reference: https://code.visualstudio.com/docs/editor/debugging#_launchjson-attributes
+
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Chrome: Launch",
+            "preLaunchTask": "build",
+            "type": "chrome",
+            "request": "launch",
+            "file": "${workspaceFolder}/build/index.html"
+        }
+    ]
+}
