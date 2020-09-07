@@ -33,7 +33,7 @@ jobs:
                   ./build.ps1
             - name: Deploy website
               if: github.event_name == 'push'
-              shell: pwsh
+              shell: bash
               run: |
                   git config --global user.name "github-actions"
                   git config --global user.email "alex@alexrp.com"
