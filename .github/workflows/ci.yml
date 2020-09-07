@@ -35,27 +35,15 @@ jobs:
               if: github.event_name == 'push'
               shell: pwsh
               run: |
-                  echo "$LASTEXITCODE Setting name"
                   git config --global user.name "github-actions"
-                  echo "$LASTEXITCODE Setting email"
                   git config --global user.email "alex@alexrp.com"
-                  echo "$LASTEXITCODE Getting SHA"
-                  $sha = git rev-parse -q --verify HEAD
-                  echo "$LASTEXITCODE Source commit SHA is $sha"
+                  sha=$(git rev-parse -q --verify HEAD)
                   git checkout origin/live -b live
-                  echo "$LASTEXITCODE Removing old files"
                   git rm "*" -fr
-                  echo "$LASTEXITCODE Restoring special files"
                   git checkout HEAD -- .gitattributes .nojekyll CNAME
-                  echo "$LASTEXITCODE Moving built files"
-                  Move-Item build/* .
-                  echo "$LASTEXITCODE Removing build directories"
-                  Remove-Item build, obj -Force -Recurse
-                  echo "$LASTEXITCODE Adding changes"
+                  mv build/* .
+                  rm -fr build obj
                   git add -A
-                  echo "$LASTEXITCODE Committing changes"
                   git commit -m "CI: Deploy $sha."
-                  echo "$LASTEXITCODE Pushing changes"
                   git push origin live
-                  echo "$LASTEXITCODE Switching back to master"
                   git checkout master
