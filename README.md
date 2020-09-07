@@ -1,4 +1,4 @@
-# <img src="https://raw.githubusercontent.com/flare-lang/flare-lang.github.io/source/Flare.svg" width="32"> Flare Programming Language Website
+# ![Flare](Flare.svg) Flare Programming Language Website
 
 This repository contains the source code for the Flare programming language
 website, which is hosted at [flare-lang.org](https://flare-lang.org).
@@ -15,7 +15,7 @@ Requirements:
 * [wkhtmltopdf](https://wkhtmltopdf.org)
 * [markdownlint-cli](https://github.com/igorshubovych/markdownlint-cli)
 
-Run `./build.ps1` to produce the website in the `build` directory.
+Run `./build.ps1` to produce the website and PDF in the `build` directory.
 
 Run `./lint.ps1` to lint all Markdown files.
 
