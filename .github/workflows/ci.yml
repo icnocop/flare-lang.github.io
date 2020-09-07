@@ -34,6 +34,7 @@ jobs:
                   git config --global user.name "github-actions"
                   git config --global user.email "alex@alexrp.com"
                   $sha = git rev-parse HEAD -q --verify
+                  git fetch origin live
                   git checkout origin/live -b live
                   git rm "*" -fr
                   git checkout HEAD -- .gitattributes .nojekyll CNAME
