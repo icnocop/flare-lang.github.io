@@ -38,12 +38,21 @@ jobs:
                   git config --global user.name "github-actions"
                   git config --global user.email "alex@alexrp.com"
                   $sha = git rev-parse HEAD -q --verify
+                  echo Source commit SHA is $sha
                   git checkout origin/live -b live
+                  echo Removing old files
                   git rm "*" -fr
+                  echo Restoring special files
                   git checkout HEAD -- .gitattributes .nojekyll CNAME
+                  echo Moving built files
                   Move-Item build/* .
+                  echo Removing build directories
                   Remove-Item build, obj -Force -Recurse
+                  echo Adding changes
                   git add -A
+                  echo Committing changes
                   git commit -m "CI: Deploy $sha."
+                  echo Pushing changes
                   git push origin live
+                  echo Switching back to master
                   git checkout master
