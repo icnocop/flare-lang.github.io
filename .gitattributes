@@ -1,3 +1,10 @@
 # Reference: https://git-scm.com/docs/gitattributes
 
 * text
+*.eot binary
+*.ico binary
+*.pdf binary
+*.png binary
+*.ttf binary
+*.woff binary
+*.woff2 binary
