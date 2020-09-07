@@ -35,6 +35,7 @@ jobs:
               if: github.event_name == 'push'
               shell: pwsh
               run: |
+                  $ErrorActionPreference = "Continue"
                   git config --global user.name "github-actions"
                   git config --global user.email "alex@alexrp.com"
                   $sha = git rev-parse HEAD -q --verify
