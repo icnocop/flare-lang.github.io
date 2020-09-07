@@ -1,2 +1,4 @@
+# Reference: https://git-scm.com/docs/gitignore
+
 /build
 /obj

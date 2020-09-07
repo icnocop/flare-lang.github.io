@@ -1,34 +1,32 @@
 // Reference: https://dotnet.github.io/docfx/tutorial/docfx.exe_user_manual.html#3-docfxjson-format
 
 {
-  "build": {
-    "content": [
-      {
-        "files": [
-          "*.md",
-          "toc.yml"
+    "build": {
+        "dest": "build",
+        "content": [
+            {
+                "files": [
+                    "toc.yml",
+                    "*.md"
+                ],
+                "exclude": [
+                    "LICENSE.md",
+                    "README.md"
+                ]
+            }
         ],
-        "exclude": [
-          "LICENSE.md",
-          "README.md"
+        "globalMetadataFiles": "global.json",
+        "markdownEngineName": "markdig",
+        "resource": [
+            {
+                "files": [
+                    "images/**"
+                ]
+            }
+        ],
+        "template": [
+            "statictoc",
+            "theme"
         ]
-      }
-    ],
-    "dest": "build",
-    "globalMetadataFiles": [
-      "global.json"
-    ],
-    "markdownEngineName": "markdig",
-    "resource": [
-      {
-        "files": [
-          "images/**"
-        ]
-      }
-    ],
-    "template": [
-      "statictoc",
-      "theme"
-    ]
-  }
+    }
 }
