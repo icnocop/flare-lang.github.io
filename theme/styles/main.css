@@ -1,0 +1,55 @@
+body
+{
+    background-color: #2d2d30;
+    color: #ccd5dc;
+}
+
+code,
+pre
+{
+    background-color: #222222;
+    border: 1px solid #1c1c1c;
+    color: #ccd5dc;
+}
+
+.affix ul > li > a
+{
+    color: #bfbfbf;
+}
+
+.affix ul > li > a:hover
+{
+    color: #ffffff;
+}
+
+.anchorjs-link
+{
+    color: #bfbfbf;
+}
+
+.anchorjs-link:hover
+{
+    color: #ffffff;
+}
+
+.footer
+{
+    background-color: #1e1e1e;
+    border-top: none;
+}
+
+.table-bordered,
+.table-bordered > tbody > tr > td,
+.table-bordered > tbody > tr > th,
+.table-bordered > tfoot > tr > td,
+.table-bordered > tfoot > tr > th,
+.table-bordered > thead > tr > td,
+.table-bordered > thead > tr > th
+{
+    border: 1px solid #1c1c1c;
+}
+
+.table-striped > tbody > tr:nth-of-type(odd)
+{
+    background-color: #212123;
+}

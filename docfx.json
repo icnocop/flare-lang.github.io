@@ -1,14 +1,16 @@
+// Reference: https://dotnet.github.io/docfx/tutorial/docfx.exe_user_manual.html#3-docfxjson-format
+
 {
   "build": {
     "content": [
       {
-        "exclude": [
-          "LICENSE.md",
-          "README.md"
-        ],
         "files": [
           "*.md",
           "toc.yml"
+        ],
+        "exclude": [
+          "LICENSE.md",
+          "README.md"
         ]
       }
     ],
@@ -26,7 +28,7 @@
     ],
     "template": [
       "statictoc",
-      "darkfx/darkfx"
+      "theme"
     ]
   }
 }

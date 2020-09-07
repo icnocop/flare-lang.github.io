@@ -19,8 +19,8 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 ## CC0 1.0 Universal
 
-All content in this website, excluding example code and code in the
-[`darkfx` directory](darkfx), is available under the following terms:
+All content in this website, excluding example code, is available under the
+following terms:
 
 ```text
 Creative Commons Legal Code

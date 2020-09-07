@@ -1,3 +1,5 @@
+// Reference: https://dotnet.github.io/docfx/tutorial/docfx.exe_user_manual.html#322-reserved-metadata
+
 {
   "_appTitle": "Flare Programming Language",
   "_appFooter": "The source code for this website is available on <a href=\"https://github.com/flare-lang/flare-lang.github.io\">GitHub</a>.",
