@@ -1,0 +1,11 @@
+{
+    "recommendations": [
+        "codezombiech.gitignore",
+        "DavidAnson.vscode-markdownlint",
+        "DotJoshJohnson.xml",
+        "EditorConfig.EditorConfig",
+        "GitHub.vscode-pull-request-github",
+        "hashhar.gitattributes",
+        "ms-vscode.PowerShell"
+    ]
+}
