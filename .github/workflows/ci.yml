@@ -35,13 +35,12 @@ jobs:
               if: github.event_name == 'push'
               shell: pwsh
               run: |
-                  $ErrorActionPreference = "Continue"
                   echo "$LASTEXITCODE Setting name"
                   git config --global user.name "github-actions"
                   echo "$LASTEXITCODE Setting email"
                   git config --global user.email "alex@alexrp.com"
                   echo "$LASTEXITCODE Getting SHA"
-                  $sha = git rev-parse HEAD -q --verify
+                  $sha = git rev-parse -q --verify HEAD
                   echo "$LASTEXITCODE Source commit SHA is $sha"
                   git checkout origin/live -b live
                   echo "$LASTEXITCODE Removing old files"
