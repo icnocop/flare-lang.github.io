@@ -8,6 +8,7 @@
         "EditorConfig.EditorConfig",
         "GitHub.vscode-pull-request-github",
         "hashhar.gitattributes",
-        "ms-vscode.PowerShell"
+        "ms-vscode.PowerShell",
+        "msjsdiag.debugger-for-chrome"
     ]
 }
