@@ -1,0 +1,60 @@
+// Reference: https://code.visualstudio.com/docs/editor/tasks
+
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "type": "shell",
+            "command": "./build.ps1",
+            "runOptions": {
+                "instanceLimit": 1
+            },
+            "problemMatcher": [],
+            "presentation": {
+                "panel": "dedicated",
+                "reveal": "silent",
+                "revealProblems": "onProblem",
+                "showReuseMessage": false,
+                "clear": true
+            }
+        },
+        {
+            "label": "lint",
+            "dependsOn": "build",
+            "type": "shell",
+            "command": "./lint.ps1",
+            "runOptions": {
+                "instanceLimit": 1
+            },
+            "problemMatcher": [],
+            "presentation": {
+                "panel": "dedicated",
+                "reveal": "silent",
+                "revealProblems": "onProblem",
+                "showReuseMessage": false,
+                "clear": true
+            }
+        },
+        {
+            "label": "clean",
+            "type": "shell",
+            "command": "./clean.ps1",
+            "runOptions": {
+                "instanceLimit": 1
+            },
+            "problemMatcher": [],
+            "presentation": {
+                "panel": "dedicated",
+                "reveal": "silent",
+                "revealProblems": "onProblem",
+                "showReuseMessage": false,
+                "clear": true
+            }
+        }
+    ]
+}
