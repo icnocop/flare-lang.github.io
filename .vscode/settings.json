@@ -1,3 +1,5 @@
+// Reference: https://code.visualstudio.com/docs/getstarted/settings
+
 {
     "files.exclude": {
         "build": true,
