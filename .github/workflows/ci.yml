@@ -14,6 +14,10 @@ jobs:
             - uses: xt0rted/markdownlint-problem-matcher@v1
             - name: Clone repository
               uses: actions/checkout@v2.3.2
+            - name: Fetch full history
+              shell: pwsh
+              run: |
+                  git fetch origin --unshallow
             - name: Install dependencies
               shell: pwsh
               run: |
@@ -34,7 +38,6 @@ jobs:
                   git config --global user.name "github-actions"
                   git config --global user.email "alex@alexrp.com"
                   $sha = git rev-parse HEAD -q --verify
-                  git fetch origin live
                   git checkout origin/live -b live
                   git rm "*" -fr
                   git checkout HEAD -- .gitattributes .nojekyll CNAME
