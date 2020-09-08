@@ -65,6 +65,17 @@
       "version": ""
     },
     {
+      "type": "Resource",
+      "source_relative_path": "images/pdf.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/pdf.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
       "type": "Conceptual",
       "source_relative_path": "index.md",
       "output": {
