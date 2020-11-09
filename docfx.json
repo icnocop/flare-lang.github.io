@@ -49,6 +49,7 @@
         ],
         "name": "flare",
         "outline": "WkDefaultOutline",
+        "noStdin": true,
         "excludeDefaultToc": true,
         "wkhtmltopdf": {
             "additionalArguments": "--enable-local-file-access"
