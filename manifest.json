@@ -9,7 +9,7 @@
       "output": {
         ".html": {
           "relative_path": "community.html",
-          "hash": "fedWheBS+ACFuXXFCy4TLA=="
+          "hash": "x4cKnL2+ZA23L/wh7oF+mQ=="
         }
       },
       "is_incremental": false,
@@ -21,7 +21,7 @@
       "output": {
         ".html": {
           "relative_path": "development.html",
-          "hash": "VL7ohv0n8uEUTqrR51hbHg=="
+          "hash": "wgWyxknC8BDbrVYwi0VNfg=="
         }
       },
       "is_incremental": false,
@@ -36,7 +36,7 @@
       "output": {
         ".html": {
           "relative_path": "documentation.html",
-          "hash": "3y0F2c5gFOD4G80LhXbhaQ=="
+          "hash": "LghmfoUgk6TRbF60gna3hQ=="
         }
       },
       "is_incremental": false,
@@ -65,23 +65,12 @@
       "version": ""
     },
     {
-      "type": "Resource",
-      "source_relative_path": "images/pdf.png",
-      "output": {
-        "resource": {
-          "relative_path": "images/pdf.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
       "type": "Conceptual",
       "source_relative_path": "index.md",
       "output": {
         ".html": {
           "relative_path": "index.html",
-          "hash": "cOf05FdN0TfjbFNaphCU1g=="
+          "hash": "Q4nUAUXXSo10BgtzjtvYPw=="
         }
       },
       "is_incremental": false,
@@ -93,7 +82,7 @@
       "output": {
         ".html": {
           "relative_path": "installation.html",
-          "hash": "Oo7ANaqCG+FgbgwzbLHGGA=="
+          "hash": "h2dQ0sLxQ9QEQqNBt25cTA=="
         }
       },
       "is_incremental": false,
@@ -105,7 +94,7 @@
       "output": {
         ".html": {
           "relative_path": "language-reference.html",
-          "hash": "1M9hB0wV3KDHjPw2rEkN2w=="
+          "hash": "AEgtkbsaELn6pPr+f4U3HQ=="
         }
       },
       "is_incremental": false,
@@ -117,7 +106,7 @@
       "output": {
         ".html": {
           "relative_path": "news.html",
-          "hash": "8RVBXFvVnsj60CLMkz3YNw=="
+          "hash": "ke/UShETq2Z0RPdwFk8qwA=="
         }
       },
       "is_incremental": false,

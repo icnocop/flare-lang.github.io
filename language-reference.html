@@ -8,7 +8,7 @@
     <title>Language Reference | Flare Programming Language </title>
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Language Reference | Flare Programming Language ">
-    <meta name="generator" content="docfx 2.56.2.0">
+    <meta name="generator" content="docfx 2.56.4.0">
     
     <link rel="shortcut icon" href="images/favicon.png">
     <link rel="stylesheet" href="styles/docfx.vendor.css">
@@ -454,8 +454,8 @@ for static analysis.)</p>
 of any other meaningful value (similar to <code>null</code> in other languages).</li>
 <li>Boolean: Has the value <code>true</code> or <code>false</code>.</li>
 <li>Atom: A named constant with an indeterminate value. Comparing two atoms is
-much faster than comparing two strings, so atoms are typically used as markers
-or tags. Examples: <code>:foo</code>, <code>Bar</code>, <code>:$baz</code>.</li>
+much faster than comparing two strings, so atoms are typically used as
+markers or tags. Examples: <code>:foo</code>, <code>Bar</code>, <code>:$baz</code>.</li>
 <li>Integer: An arbitrarily large integer. Examples: <code>42</code>, <code>-42</code>,
 <code>123456789123456789123456789123456789</code>.</li>
 <li>Real: A real number represented as IEEE 754 <code>binary64</code> floating point.
@@ -466,8 +466,7 @@ Examples: <code>12.34</code>, <code>-42.0</code>, <code>1.2e-3</code>.</li>
 such as <code>Core::IO</code>. Module values are functionally similar to records
 containing only immutable fields.</li>
 <li>Function: A callable function as a value. Carries information such as its
-originating module, name (if any), arity, and upvalues (if any). Example:
-<code>fn(x) =&gt; x * x</code>.</li>
+originating module, name (if any), and arity. Example: <code>fn(x) =&gt; x * x</code>.</li>
 <li>Record: Similar to objects in other languages, a record is a collection of
 fields (which can individually be mutable or immutable), optionally carrying
 a name. Records can define overloaded behaviors such as operators, hashing,
@@ -477,10 +476,10 @@ pattern views, etc. Examples: <code>rec { x = 42, y = :foo }</code>,
 that they must always carry a name, and they are allowed to be used as the
 operand of the <code>raise</code> expression. Example:
 <code>exc MyError { message = &quot;error!&quot; }</code>.</li>
-<li>Tuple: An immutable sequence of values with a fixed length of at least 2
+<li>Tuple: An immutable array of values with a fixed length of at least 2
 elements. Examples: <code>(42, :foo)</code>, <code>(:ok, rec { x = 42 }, &quot;y&quot;)</code>.</li>
-<li>Array: An sequence of values that may be mutable or immutable. Mutable arrays
-are expandable. Examples: <code>[]</code>, <code>[1, 2, 3]</code>, <code>mut [1, :foo, &quot;bar&quot;]</code>.</li>
+<li>Array: An array of values that may be mutable or immutable. Mutable arrays are
+expandable. Examples: <code>[]</code>, <code>[1, 2, 3]</code>, <code>mut [1, :foo, &quot;bar&quot;]</code>.</li>
 <li>Set: A hashed set of values that may be mutable or immutable, and does not
 allow duplicate values. Mutable sets are expandable. Sets have no ordering
 guarantees. Examples: <code>#{}</code>, <code>#{&quot;x&quot;, :y, z}</code>, <code>mut #{:foo, :bar, :baz}</code>.</li>
@@ -492,8 +491,9 @@ ordering guarantees. Examples: <code>#[]</code>, <code>#[&quot;foo&quot; : 42, :
 library functions such as <code>Core::Agent::self</code> and <code>Core::Agent::spawn</code>.</li>
 <li>Reference: A globally unique, opaque value. A reference value can only be
 obtained by calling <code>Core::new_ref</code> or by obtaining it from another agent.
-References are unforgeable and are thus commonly used to represent
-capabilities.</li>
+References are backed by at least 20 bytes of randomly generated data. These
+properties make references practically unforgeable and non-repeatable within
+a program's lifetime.</li>
 <li>Pointer: A native pointer. These are usually obtained by calling into various
 functions provided by the runtime system. As Flare has no syntax for
 dereferencing pointers, pointer values are effectively opaque to Flare code.</li>
@@ -619,9 +619,9 @@ match bar() {
     _ =&gt; println(&quot;something else&quot;);
 };
 </code></pre>
-<p>A failed match in a <code>let</code> or <code>use</code> statement will result in a panic, as will a
-failed match in the <code>for</code> expression. A <code>match</code> expression will only panic if no
-cases match and there is no fallback case.</p>
+<p>A failed match in a <code>let</code> statement will result in a panic, as will a failed
+match in the <code>for</code> and <code>use</code> expressions. A <code>match</code> expression will only panic
+if no cases match and there is no fallback case.</p>
 <p>Patterns allow recursively destructuring arbitrarily complex values and data
 structures.</p>
 <h3 id="error-handling">Error Handling</h3>
@@ -651,7 +651,7 @@ with <code>?</code> or handle it with <code>catch</code>, a panic will occur. So
 }
 
 fn bar() {
-    foo()?; ' OK; propagates exception to the caller of `bar`.
+    foo()?; ' OK; propagatates exception to the caller of `bar`.
 
     foo()? catch {
         _ =&gt; nil; ' OK; exception was handled.
@@ -764,9 +764,9 @@ variables. These are both passed by the host environment. Any value returned by
 this function is ignored; halting with a non-zero status code can be done with
 the <code>Core::halt</code> function.</p>
 <p>The <code>main</code> function will be executed in the root agent - a special agent created
-by the runtime system on startup. This agent has all capabilities initially made
-available by the runtime system, and can freely provide those capabilities to
-child agents as needed. The root agent is thus quite similar to the <code>init</code>
+by the runtime system on startup. This agent has all capabilities initially
+made available by the runtime system, and can freely provide those capabilities
+to child agents as needed. The root agent is thus quite similar to the <code>init</code>
 process in a Unix system.</p>
 <p>The runtime system terminates once the <code>main</code> function returns, or if some
 external signal has triggered a runtime shutdown. Termination will not wait for
@@ -1045,7 +1045,8 @@ map-pattern-pair = expression &quot;:&quot; pattern
           <div class="hidden-sm col-md-2" role="complementary">
             <div class="sideaffix">
               <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
-              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+                <h5>In This Article</h5>
+                <div></div>
               </nav>
             </div>
           </div>
